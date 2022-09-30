@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" 
+"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+
+<definition name=".admin.mservice.qna.qna_list" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+	<put-attribute name="admincontent" value="/WEB-INF/views/admin/mservice/qna/qna_list.jsp"></put-attribute>
+</definition>
+
+<definition name=".admin.mservice.qna.qna_view" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+	<put-attribute name="admincontent" value="/WEB-INF/views/admin/mservice/qna/qna_view.jsp"></put-attribute>
+</definition>
+
+
+</tiles-definitions>

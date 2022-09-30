@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.L3_1team.health.mybatis.menu.diaryMapper">
+		<resultMap type="com.L3_1team.health.dto.client.menu.Diary_diary_Dto" id="DTO">
+		<!-- num 컬럼을 멤버변수 num과 매핑해라. -->
+		<result column="d_num" property="d_num"/>
+		<result column="id" property="id"/>
+		<result column="d_title" property="d_title"/>
+		<result column="d_content" property="d_content"
+					jdbcType="CLOB" javaType="string"/>
+		<result column="d_date" property="d_date"/>
+			<result column="d" property="d"/>
+	</resultMap>
+	<select id="selectdate" parameterType="hashmap"  resultMap="DTO">
+	select * from diary where id=#{id} and  to_char(d_date,'yyyymmdd') between #{startday2} and #{endday2} 
+	</select>
+		<select id="info" parameterType="int"  resultMap="DTO">
+	select * from diary where d_num=#{value}
+	</select>
+	
+		<select id="menu_list" parameterType="int"  resultType="com.L3_1team.health.dto.client.menu.Diary_diarymenu_Dto">
+	select * from diarymenu  where d_num=#{value}
+	  </select>
+	  
+	  
+	  <insert id="diary_insert" parameterType="com.L3_1team.health.dto.client.menu.Diary_diary_Dto" >
+	 INSERT INTO diary VALUES(diary_SEQ.NEXTVAL,#{id},#{d_title},#{d_content},#{d})
+	  </insert>
+	  <select id="num_info" parameterType="hashmap"  resultType="int">
+	select d_num from diary  where id=#{logid} and to_char(d_date,'yyyymmdd') like #{date}
+	  </select>
+	    
+	  <insert id="menu_insert"  parameterType="com.L3_1team.health.dto.client.menu.Diary_diarymenu_Dto">
+	 INSERT INTO diarymenu 
+	  VALUES(diarymenu_SEQ.NEXTVAL,#{d_num},#{dm_time},#{dm_img},#{calorie},#{fat},#{cardohydrate},#{cholesterol},#{protein})
+	  </insert>
+	  
+	  <delete id="diary_delete" parameterType="int">
+	    DELETE FROM diary WHERE d_num=#{value}
+	  </delete>
+	  <delete id="menu_delete" parameterType="int">
+	  DELETE FROM diarymenu WHERE d_num=#{value}
+	  </delete>
+	    <delete id="reple_delete" parameterType="int">
+	  DELETE FROM diaryreple WHERE d_num=#{value}
+	  </delete>
+	  
+	  <update id="diary_update" parameterType="com.L3_1team.health.dto.client.menu.Diary_diary_Dto" >
+	    UPDATE diary
+               SET d_content=#{d_content},d_title=#{d_title}
+               WHERE d_num=#{d_num} and id=#{id}
+	  </update>
+	  
+	  
+	  
+	  
+	  
+
+	  
+	  
+</mapper>

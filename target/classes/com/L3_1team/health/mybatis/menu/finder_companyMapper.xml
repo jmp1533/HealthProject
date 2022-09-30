@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.L3_1team.health.mybatis.menu.finder_companyMapper">
+	
+	<resultMap type="com.L3_1team.health.dto.client.menu.Finder_company_Dto" id="company_Dto">
+		<result column="b_num" property="b_num"/>
+		<result column="t_id" property="t_id"/>
+		<result column="b_corporatenum" property="b_corporatenum"/>
+		<result column="b_name" property="b_name"/>
+		<result column="b_addr" property="b_addr"/>
+		<result column="zipcode" property="zipcode"/>
+		<result column="b_phone" property="b_phone"/>
+		<result column="b_email" property="b_email"/>
+		<result column="b_content" property="b_content"/>
+		<result column="b_x" property="b_x"/>
+		<result column="b_y" property="b_y"/>
+		<result column="b_condition" property="b_condition"/>
+		<result column="b_date" property="b_date"/>
+	</resultMap>
+	
+	<select id="list" parameterType="hashmap" resultType="com.L3_1team.health.dto.client.menu.Finder_company_Dto">
+		select * from
+			(select aa.*, rownum rnum from
+				(select * from business 
+					<if test="b_name!=null">
+						where b_name like '%' || #{b_name} || '%'
+					</if>
+					order by b_num desc	
+				)aa
+			)
+		where <![CDATA[rnum>=#{startRow} and rnum<=#{endRow}]]>
+	</select>
+	
+	<select id="search" parameterType="int" resultMap="company_Dto">
+		select * from business where b_num=#{value}
+	</select>
+	
+	<select id="getCount" resultType="int">
+		select NVL(count(*),0) from business
+			<if test="b_name!=null">
+			 <where>
+			 	 b_name like '%' || #{b_name} || '%'
+			 </where>
+			</if>
+	</select>
+	
+	<select id="img" parameterType="int" resultType="String">
+		select bi_img from businessimg where b_num=#{value}
+	</select>
+	
+	<delete id="delete" parameterType="int">
+		delete from business where b_num=#{b_num}
+	</delete>
+</mapper>

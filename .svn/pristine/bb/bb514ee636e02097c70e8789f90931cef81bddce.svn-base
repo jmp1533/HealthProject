@@ -1,0 +1,93 @@
+package com.L3_1team.health.controller.admin;
+
+import java.util.HashMap;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.L3_1team.health.Utility.Page.PageUtil;
+import com.L3_1team.health.dto.admin.admin_mservice_qna_Dto;
+import com.L3_1team.health.dto.admin.admin_mservice_qna_reple_Dto;
+import com.L3_1team.health.service.admin.admin_mservice_qna_service;
+
+@Controller
+public class admin_mservice_qna_Controller {
+	@Inject admin_mservice_qna_service qna_service;
+	
+	public void setQna_service(admin_mservice_qna_service qna_service) {
+		this.qna_service = qna_service;
+	}
+	
+	//list
+	@RequestMapping(value="/admin/mservice/qna/qna_list",method=RequestMethod.GET)
+	public ModelAndView list(
+			@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+			@RequestParam(value="field",required=false)String field,
+			@RequestParam(value="keyword",required=false)String keyword){
+		
+		ModelAndView mv = new ModelAndView(".admin.mservice.qna.qna_list");
+		
+		if (field==null && keyword==null) {
+			field="q_title";
+			keyword="";
+		}
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("field", field);
+		map.put("keyword", keyword);
+		
+		int totalRowCount = qna_service.search(map);
+
+		PageUtil pu = new PageUtil(pageNum, totalRowCount, 10, 10);
+		
+		map.put("startRow", pu.getStartRow());
+		map.put("endRow", pu.getEndRow());
+			
+		List<admin_mservice_qna_Dto> list = qna_service.list(map);
+		
+		mv.addObject("pu", pu);
+		mv.addObject("list", list);
+		mv.addObject("field", field);
+		mv.addObject("keyword", keyword);
+		
+		return mv;
+	}
+	
+	
+	//상세보기
+	@RequestMapping(value="/admin/mservice/qna/qna_view",method=RequestMethod.GET)
+	public String view(@RequestParam("q_num")int q_num,Model model){
+		HashMap<String,Object> map=new HashMap<String, Object>();
+		admin_mservice_qna_Dto dto=qna_service.getinfo(q_num);
+		List<admin_mservice_qna_reple_Dto> list=qna_service.repleinfo(q_num);
+		
+		model.addAttribute("dto", dto);
+		model.addAttribute("list", list);
+		
+		return ".admin.mservice.qna.qna_view";
+	}
+	
+	//댓글쓰기
+	@RequestMapping(value="/admin/mservice/qna/reple",method=RequestMethod.POST)
+	public String reple(
+			//HttpServletRequest request,
+			@RequestParam("q_num")int q_num,
+			@RequestParam("qr_content")String qr_content
+			){
+		//String admin_id = (String)request.getSession().getAttribute("id");
+		
+		String admin_id="admin";
+		admin_mservice_qna_reple_Dto dto=new admin_mservice_qna_reple_Dto(0, q_num, admin_id, qr_content, null);
+		System.out.println(dto.toString());
+		qna_service.reple(dto);
+		
+		return "redirect:/admin/mservice/qna/qna_view?q_num="+q_num;//?q_num="+q_num
+	}
+}

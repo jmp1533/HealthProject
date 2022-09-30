@@ -1,0 +1,278 @@
+package com.L3_1team.health.controller.client.menu;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.UUID;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.L3_1team.health.dto.admin.Health_Dto;
+import com.L3_1team.health.dto.client.menu.Finder_company_Dto;
+import com.L3_1team.health.dto.client.user.Mypage_outDto;
+import com.L3_1team.health.dto.client.user.TrainerDto;
+import com.L3_1team.health.dto.client.user.TrainerValDto;
+import com.L3_1team.health.service.client.menu.Mypage_trainer_Service;
+import com.L3_1team.health.validation.TrainerSignupValidator;
+
+@Controller
+public class Mypage_trainer_Controller {
+	@Inject Mypage_trainer_Service trainer_Service;
+	
+	public void setTrainer_Service(Mypage_trainer_Service trainer_Service) {
+		this.trainer_Service = trainer_Service;
+	}
+
+	@RequestMapping(value="/client/menu/mypage/traner/Trainer_info", method=RequestMethod.GET)
+	public String info(HttpServletRequest request, Model model){
+		String t_id = (String)request.getSession().getAttribute("tlogid");
+		TrainerDto dto=trainer_Service.getinfo(t_id);
+		model.addAttribute("dto", dto);
+		return ".client.menu.mypage.traner.Trainer_info";
+	}
+	
+	@RequestMapping(value = "/client/menu/mypage/Trainer_update", method = RequestMethod.POST)
+	public String updatesearch(@Param("pwd")String pwd, HttpServletRequest request, Model model){
+		HashMap<String, String> map = new HashMap<String, String>();
+
+		String tlogid = (String)request.getSession().getAttribute("tlogid");
+	
+		if(tlogid != null){
+			map.put("t_id", tlogid);
+			map.put("t_pwd", pwd);
+			
+			TrainerDto trainerDto = trainer_Service.search(map);
+			try{
+				TrainerValDto valDto = temp(trainerDto);
+				model.addAttribute("valDto", valDto);
+				return ".client.menu.mypage.traner.Trainer_update";
+			}catch(Exception e){
+				return ".client.menu.mypage.Update";
+			}
+		}else{
+			return ".client.menu.mypage.Update";
+		}
+	}
+	
+	public TrainerValDto temp(TrainerDto trainerDto){
+		String addr[] = trainerDto.getT_addr().split("&");
+		String phone[] = trainerDto.getT_phone().split("-");
+		String email[] = trainerDto.getT_email().split("@");
+		
+		return new TrainerValDto(trainerDto.getT_id(), null, null, trainerDto.getT_question(), 
+				trainerDto.getT_answer(), trainerDto.getT_name(), trainerDto.getT_birth(), 
+				trainerDto.getT_gender(), trainerDto.getT_company(), trainerDto.getZipcode(), 
+				addr[0], addr[1], phone[0], phone[1], phone[2], email[0], email[1], trainerDto.getT_height(),
+				trainerDto.getT_weight(), null, trainerDto.getT_img()); 
+	}
+	
+	@RequestMapping(value = "/client/menu/mypage/Trainer_updateOk", method = RequestMethod.POST)
+	public String sign_upInsert(
+			@ModelAttribute("trainerValDto") TrainerValDto trainerValDto,
+			BindingResult result, HttpSession session, MultipartFile file1) {
+
+		new TrainerSignupValidator().validate(trainerValDto, result);
+		if (result.hasErrors()) {
+			return ".client.menu.mypage.traner.Trainer_update";
+		}
+
+		String orgfilename = file1.getOriginalFilename();
+		String savefilename = UUID.randomUUID() + "_" + orgfilename;
+		String path = session.getServletContext().getRealPath("/resources/upload");
+		FileOutputStream fos = null;
+		InputStream is = null;
+
+		try {
+			fos = new FileOutputStream(path + "/" + savefilename);
+			is = file1.getInputStream();
+			FileCopyUtils.copy(is, fos);
+			System.out.println("파일업로드 성공");
+
+			TrainerDto trainerDto = temp(trainerValDto, savefilename);
+			int n = trainer_Service.update(trainerDto);
+
+			if (n > 0) {
+				return ".client.menu.mypage.Mypage";
+			} else {
+				return ".client.menu.mypage.traner.Trainer_update";
+			}
+		} catch (Exception ie) {
+			System.out.println(ie.getMessage());
+			return ".client.menu.mypage.traner.Trainer_update";
+		} finally {
+			try {
+				if (is != null) is.close();
+				if (fos != null) fos.close();
+			} catch (IOException ie) {}
+		}
+	}
+	
+	public TrainerDto temp(TrainerValDto trainerValDto, String savefilename) {
+		String t_id = trainerValDto.getId1();
+		String t_pwd = trainerValDto.getPwd1();
+		String t_name = trainerValDto.getName1();
+		String zipcode = trainerValDto.getZipcode1();
+		String t_addr = trainerValDto.getAddr1() + "&"
+				+ trainerValDto.getAddr2();
+		String t_company = trainerValDto.getCompany1();
+		String t_phone = trainerValDto.getPhone1() + "-"
+				+ trainerValDto.getPhone2() + "-" + trainerValDto.getPhone3();
+		String t_birth = trainerValDto.getBirth1();
+		String t_email = trainerValDto.getEmail1() + "@"
+				+ trainerValDto.getEmail2();
+		String t_img = savefilename;
+		int t_question = trainerValDto.getQuestion1();
+		String t_answer = trainerValDto.getAnswer1();
+		int t_gender = trainerValDto.getGender1();
+		float t_weight = trainerValDto.getWeight1();
+		float t_height = trainerValDto.getHeight1();
+		String t_introduction = trainerValDto.getIntroduction1();
+
+		return new TrainerDto(t_id, t_pwd, t_name, zipcode, t_addr, t_company,
+				t_phone, t_birth, t_email, t_img, t_question, t_answer, t_gender,
+				t_weight, t_height, t_introduction, null, 0);
+	}
+	
+	//회원탈퇴
+		@RequestMapping(value = "/client/menu/mypage/traner/Trainer_out_pwd", method = RequestMethod.GET)
+		public String outForm(){
+			return ".client.menu.mypage.traner.Trainer_out_pwd";
+		}
+		
+		@RequestMapping(value = "/client/menu/mypage/traner/Trainer_out_pwd", method = RequestMethod.POST)
+		public String out(
+				@RequestParam("pwd")String t_pwd,
+				@RequestParam(value="out_reason",defaultValue="0")String out_reason,
+				HttpServletRequest request ){
+			
+			if(out_reason.equals("0")){
+				return "/client/menu/mypage/traner/Trainer_out_pwd";
+			}
+			
+			HashMap<String, String> map = new HashMap<String, String>();
+			String t_id = (String)request.getSession().getAttribute("tlogid");
+				map.put("t_id", t_id);
+				map.put("t_pwd", t_pwd);
+				
+				int n=trainer_Service.search1(map);
+				if(n==1){
+					
+					Mypage_outDto outDto=new Mypage_outDto(0, t_id, out_reason, null);
+					
+					trainer_Service.out(outDto, t_id);
+					
+					request.getSession().invalidate();
+					return ".user.main";
+				}else{
+					return "/client/menu/mypage/traner/Trainer_out_pwd";
+				}
+		}
+
+	@RequestMapping(value="/client/menu/mypage/traner/Trainer_health_register",method=RequestMethod.GET)
+	public String registerForm(HttpServletRequest request, Model model){
+		
+		String t_id = (String)request.getSession().getAttribute("tlogid");
+		
+		try{
+			Finder_company_Dto company_Dto = trainer_Service.rs(t_id);
+			Health_Dto dto = temp(company_Dto);
+			if(company_Dto!=null){
+				model.addAttribute("dto", dto);
+				return ".client.menu.mypage.traner.health_view";
+			}else{
+				return ".client.menu.mypage.traner.Trainer_health_register";
+			}
+		}catch(Exception e){
+			return ".client.menu.mypage.traner.Trainer_health_register";
+		}
+	}
+	public Health_Dto temp(Finder_company_Dto company_Dto){
+		String b_corporatenum1 = company_Dto.getB_corporatenum().split("-")[0];
+		String b_corporatenum2 = company_Dto.getB_corporatenum().split("-")[1];
+		String b_corporatenum3 = company_Dto.getB_corporatenum().split("-")[2];
+
+		String addr1 = company_Dto.getB_addr().split("&")[0];
+		String addr2 = company_Dto.getB_addr().split("&")[1];
+
+		String b_phone1 = company_Dto.getB_phone().split("-")[0];
+		String b_phone2 = company_Dto.getB_phone().split("-")[1];
+		String b_phone3 = company_Dto.getB_phone().split("-")[2];
+
+		String b_email1 = company_Dto.getB_email().split("@")[0];
+		String b_email2 = company_Dto.getB_email().split("@")[1];
+
+		return new Health_Dto(company_Dto.getB_num(), b_corporatenum1, b_corporatenum2, 
+				b_corporatenum3, company_Dto.getB_name(), addr1, addr2, company_Dto.getZipcode(),
+				b_phone1, b_phone2, b_phone3, b_email1, b_email2, company_Dto.getB_content(), 0, 0);
+	}
+	
+	@RequestMapping(value="/client/menu/mypage/traner/Trainer_health_register",method=RequestMethod.POST)
+	public String register(@ModelAttribute("dto") Health_Dto dto, HttpServletRequest request, Model model){
+		
+		String t_id = (String)request.getSession().getAttribute("tlogid");
+		Finder_company_Dto company_Dto = temp(dto);
+		company_Dto.setT_id(t_id);
+		
+		int n = trainer_Service.ri(company_Dto);
+		if(n==1){
+			model.addAttribute("dto", dto);
+			return ".client.menu.mypage.traner.health_view";
+		}else{
+			return ".client.menu.mypage.traner.Trainer_health_register";
+		}
+	}
+	
+	public Finder_company_Dto temp(Health_Dto dto){
+		String b_corporatenum = dto.getB_corporatenum1() + "-" + dto.getB_corporatenum2() + "-" + dto.getB_corporatenum3();
+		String b_addr = dto.getAddr1() + "&" + dto.getAddr2();
+		String b_phone = dto.getB_phone1() + "-" + dto.getB_phone2() + "-" + dto.getB_phone3();
+		String b_email = dto.getB_email1() + "@" + dto.getB_email2();
+		
+		return new Finder_company_Dto(0, null, b_corporatenum, dto.getB_name(), b_addr, 
+				dto.getZipcode1(), b_phone, b_email, dto.getB_content(), 0, 0, 2, null);
+	}
+	
+	@RequestMapping(value="/client/menu/mypage/traner/health_update",method=RequestMethod.GET)
+	public String UpdateForm(HttpServletRequest request, Model model){
+		String t_id = (String)request.getSession().getAttribute("tlogid");
+		Finder_company_Dto company_Dto =trainer_Service.rs(t_id);
+		
+		Health_Dto dto = temp(company_Dto);
+		dto.setB_num(company_Dto.getB_num());
+		
+		model.addAttribute("dto", dto);
+		return ".client.menu.mypage.traner.health_update";
+	}
+	
+	@RequestMapping(value="/client/menu/mypage/traner/health_update",method=RequestMethod.POST)
+	public String update(@ModelAttribute("dto") Health_Dto dto, HttpServletRequest request, Model model){
+		
+		String t_id = (String)request.getSession().getAttribute("tlogid");
+		Finder_company_Dto company_Dto = temp(dto);
+		company_Dto.setT_id(t_id);
+		company_Dto.setB_num(dto.getB_num());
+		System.out.println(1);
+		int n = trainer_Service.ru(company_Dto);
+		System.out.println(2);
+		model.addAttribute("dto", dto);
+		if(n==1){
+			return ".client.menu.mypage.traner.health_view";
+		}else{
+			return ".client.menu.mypage.traner.health_update";
+		}
+	}
+}

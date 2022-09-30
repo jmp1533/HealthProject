@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.L3_1team.health.mybatis.user.AccountFindMapper">
+	<!--아이디 찾기-->
+	<select id="user_findId" parameterType="hashMap" resultType="string">
+		select u_id from users
+		where u_name=#{name} and u_email=#{email} and u_out=1
+	</select>
+	<select id="trainer_findId" parameterType="hashMap" resultType="string">
+		select t_id from trainers
+		where t_name=#{name} and t_email=#{email} and t_out=1
+	</select>
+	
+	<!--질문 찾기 -->
+	<select id="userInfo" parameterType="hashMap" resultType="String">
+		select u_id from users
+		where u_id=#{id} 
+			<choose>
+				<when test="email2!=null">
+					and u_email=#{email2}
+				</when>
+				<when test="choice_question!=null">
+					<if test="choice_answer!=null">
+						and u_question=#{choice_question} and u_answer=#{choice_answer}
+					</if>
+				</when>
+				<otherwise></otherwise>
+			</choose>
+		 and u_out=1
+	</select>
+	<select id="trainerInfo" parameterType="hashMap" resultType="String">
+		select t_id from trainers
+		where t_id=#{id} 
+			<choose>
+				<when test="email2!=null">
+					and t_email=#{email2}
+				</when>
+				<when test="choice_question!=null">
+					<if test="choice_answer!=null">
+						and t_question=#{choice_question} and t_answer=#{choice_answer}
+					</if>
+				</when>
+				<otherwise></otherwise>
+			</choose>
+		 and t_out=1
+	</select>
+	
+	<!--비밀번호 바꾸기-->
+	<update id="trainer_changePwd" parameterType="hashMap" >
+		update trainers
+			set t_pwd=#{changePwd}
+		where t_id=#{id}
+	</update>
+	
+	<update id="user_changePwd" parameterType="hashmap" >
+		update users
+			set u_pwd=#{changePwd}
+		where u_id=#{id}
+	</update>
+</mapper>

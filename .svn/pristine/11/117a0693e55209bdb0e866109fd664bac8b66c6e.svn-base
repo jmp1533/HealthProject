@@ -1,0 +1,233 @@
+package com.L3_1team.health.controller.client.user;
+
+import java.util.HashMap;
+import java.util.Random;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.L3_1team.health.Utility.Page.OtpMailSender;
+import com.L3_1team.health.service.client.user.AccountFinderService;
+
+@Controller
+public class AccountFinderController {
+	@Inject	private AccountFinderService accountFinderService;
+	@Inject private OtpMailSender sender;
+	
+	public void setAccountFinderService(AccountFinderService accountFinderService) {
+		this.accountFinderService = accountFinderService;
+	}
+
+	public void setSender(OtpMailSender sender) {
+		this.sender = sender;
+	}
+	
+	//아이디/비번찾기
+	@RequestMapping(value="/client/user/finder/search/searchmain",method=RequestMethod.GET)
+	public String searchMain(){
+		return ".client.user.finder.searchmain";
+	}
+	
+	//아이디 찾기
+	@RequestMapping(value="/client/user/finder/search/idSearch",method=RequestMethod.POST)
+	public String user_idSearch(@RequestParam("name")String name, @RequestParam("email")String email,
+			Model model){
+		try{
+			HashMap<String, String> map=new HashMap<String, String>();
+			map.put("name", name);
+			map.put("email", email);
+
+			String u_id=accountFinderService.getUserId(map);
+			String t_id=accountFinderService.getTrainerId(map);
+			
+			if(u_id==null && t_id==null){
+				return "redirect:/client/user/finder/search/searchmain";
+			}else if(u_id!=null){
+				model.addAttribute("u_id",u_id);
+				return ".client.user.finder.idSearch";
+			}else if(t_id!=null){
+				model.addAttribute("t_id",t_id);
+				return ".client.user.finder.idSearch";
+			}else{
+				return "redirect:/client/user/finder/search/searchmain";
+			}
+		}catch(Exception e){
+			return "redirect:/client/user/finder/search/searchmain";
+		}
+	}
+	
+	//비밀번호 찾기
+	@RequestMapping(value="/client/user/finder/search/pwdSearch",method=RequestMethod.POST)
+	public String user_pwdSearch(@RequestParam("id")String id,
+			@RequestParam("email2")String email2,
+			Model model){
+		try{
+			HashMap<String, Object> map=new HashMap<String, Object>();
+			map.put("id", id);
+			map.put("email2", email2);
+			
+			String u_id=accountFinderService.getUserInfo(map);
+			String t_id =accountFinderService.getTrainerInfo(map);
+			
+			if(u_id==null && t_id==null){
+				return "redirect:/client/user/finder/search/searchmain";
+			}else if(u_id!=null){
+				model.addAttribute("u_id",u_id);
+				return ".client.user.finder.pwdSearch";
+			}else if(t_id!=null){
+				model.addAttribute("t_id",t_id);
+				return ".client.user.finder.pwdSearch";
+			}else{
+				return "redirect:/client/user/finder/search/searchmain";
+			}
+		}catch (Exception e) {
+			return "redirect:/client/user/finder/search/searchmain";
+		}
+	}
+	
+	//질문답변 체크
+	@RequestMapping(value="/client/user/finder/search/hintCompare",method=RequestMethod.POST)
+	public String user_hint_compare(@RequestParam("id")String id, @RequestParam("choice_question")int choice_question,
+									@RequestParam("choice_answer")String choice_answer, Model model){
+		try{
+		HashMap<String, Object> map=new HashMap<String, Object>();
+		map.put("id",	id);
+		map.put("choice_question", choice_question);
+		map.put("choice_answer", choice_answer);
+		
+		String u_id = accountFinderService.getUserInfo(map);
+		String t_id =accountFinderService.getTrainerInfo(map);
+		
+		Random rnd=new Random();
+		String otpset = String.valueOf("lk" + rnd.nextInt(99) + "sjgf" + rnd.nextInt(99) + "lh3d");
+		model.addAttribute("otpset", otpset); 
+			
+			if(u_id==null && t_id==null){
+				model.addAttribute("id",id);
+				return ".client.user.finder.pwdSearch";
+			}else if(u_id!=null){
+				model.addAttribute("u_id",u_id);
+				return ".client.user.finder.search.otpcheck";
+			}else if(t_id!=null){
+				model.addAttribute("t_id",t_id);
+				return ".client.user.finder.search.otpcheck";
+			}else{
+				model.addAttribute("id",id);
+				return ".client.user.finder.searchmain";
+			}
+		}catch (Exception e) {
+			model.addAttribute("id",id);
+			return ".client.user.finder.searchmain";
+		}
+	}
+	
+	
+	@RequestMapping(value="/client/user/finder/search/otpcheck",method=RequestMethod.POST)
+	public String otpcheck(@RequestParam("id")String id, @RequestParam("otpset")String otpset,
+			@RequestParam("otpcheck")String otpcheck, Model model){
+
+		if(otpset.equals(otpcheck)){
+			HashMap<String, Object> map=new HashMap<String, Object>();
+			map.put("id", id);
+			
+			String u_id = accountFinderService.getUserInfo(map);
+			String t_id =accountFinderService.getTrainerInfo(map);
+			
+			if(u_id==null && t_id==null){
+				model.addAttribute("id",id);
+				return ".client.user.finder.searchmain";
+			}else if(u_id!=null){
+				model.addAttribute("u_id",u_id);
+				return ".client.user.finder.changePwd";
+			}else if(t_id!=null){
+				model.addAttribute("t_id",t_id);
+				return ".client.user.finder.changePwd";
+			}else{
+				model.addAttribute("id",id);
+				return ".client.user.finder.searchmain";
+			}
+		}else{
+			Random rnd=new Random();
+			String os= String.valueOf("lk" + rnd.nextInt(99) + "sjgf" + rnd.nextInt(99) + "lh3d");
+			model.addAttribute("otpset", os); 
+			
+			model.addAttribute("id", id);
+			return ".client.user.finder.search.otpcheck";
+		}
+	}
+	
+	@RequestMapping(value="/client/user/finder/search/otpcheck",method=RequestMethod.GET)
+	public String otpcheckfrom(@RequestParam("id")String id, Model model){
+		
+		model.addAttribute("id", id);
+		return ".client.user.finder.changePwd";
+	}	
+	
+	@RequestMapping(value="/client/user/finder/search/changePwd",method=RequestMethod.POST)
+	public String user_change_pwd(@RequestParam("id")String id,	@RequestParam("changePwd")String changePwd,
+			@RequestParam("changePwd2")String changePwd2, Model model){
+		
+		if(changePwd.equals(changePwd2)){
+			HashMap<String, Object> map=new HashMap<String, Object>();
+			map.put("id", id);
+			map.put("changePwd", changePwd);
+			
+			String u_id = accountFinderService.getUserInfo(map);
+			String t_id =accountFinderService.getTrainerInfo(map);
+			
+			if(u_id==null && t_id==null){
+				model.addAttribute("id", id);
+				return "redirect:/client/user/finder/search/otpcheck";
+			}else if(u_id!=null){
+				int n = accountFinderService.userChangePwd(map);
+				if(n>0){
+					return ".client.user.finder.changeOk";
+				}else{
+					return "redirect:/client/user/finder/search/otpcheck";
+				}
+			}else if(t_id!=null){
+				int n = accountFinderService.TraineruserChangePwd(map);
+				if(n>0){
+					return ".client.user.finder.changeOk";
+				}else{
+					return "redirect:/client/user/finder/search/otpcheck";
+				}
+			}else{
+				model.addAttribute("id", id);
+				return "redirect:/client/user/finder/search/otpcheck";
+			}
+		}else{
+			model.addAttribute("id", id);
+			return "redirect:/client/user/finder/search/otpcheck";
+		}
+	}
+	
+	@RequestMapping(value = "/authentication", method = RequestMethod.GET)
+	@ResponseBody
+	public String sendMail(String msg, String toEmail, HttpServletRequest request){
+		Random rnd=new Random();
+		String otpset = String.valueOf(rnd.nextInt(9999)+1000);
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+		sb.append("<mail>");
+		
+		String title = "인증번호 발송!";
+		String fromEmail = "admin@gmail.com";
+		toEmail = "jmp1533@naver.com";
+		msg = otpset;
+		
+		sender.sendMail(title, msg, fromEmail, toEmail);
+		
+		sb.append("<otpset>" + otpset + "</otpset>");
+		sb.append("</mail>");
+		return sb.toString();
+	}
+}

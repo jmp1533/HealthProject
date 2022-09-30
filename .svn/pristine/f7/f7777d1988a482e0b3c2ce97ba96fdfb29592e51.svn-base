@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.L3_1team.health.mybatis.user.AccountFindMapper">
+	<!--아이디 찾기-->
+	<select id="user_findId" parameterType="hashMap" resultType="string">
+		select u_id from users
+		where u_name=#{name} and u_email=#{email}
+	</select>
+	
+	<!-- -->
+	<select id="userInfo" parameterType="hashMap" resultType="com.L3_1team.health.dto.client.user.UserDto">
+		select * from users
+		where u_id=#{search_1} and u_email=#{search_2}
+	</select>
+	
+	<!-- -->
+	<select id="trainer_findId" parameterType="hashMap" resultType="string">
+		select t_id from trainers
+		where t_name=#{search_1} and t_email=#{search_2}
+	</select>
+	
+	<!-- -->
+	<select id="trainer_findPwd" parameterType="hashMap" >
+		select t_pwd
+			from trainers
+		where t_id=#{search_1} and t_email=#{search_2}
+	</select>
+	
+	<!-- -->
+	<update id="user_changePwd" parameterType="hashmap" >
+		update users
+			set u_pwd=#{set_pwd}
+		where u_id=#{search_id}
+	</update>
+</mapper>

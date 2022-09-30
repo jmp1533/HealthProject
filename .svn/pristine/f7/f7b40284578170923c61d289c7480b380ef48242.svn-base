@@ -1,0 +1,62 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<ul>
+		<c:if test="${not empty sessionScope.id}">
+			<li>
+				<c:choose>
+					<c:when test="${not empty sessionScope.ulogid}">
+						<a href="/client/menu/mypage/user/User_info">내정보</a>
+					</c:when>
+					<c:when test="${not empty sessionScope.tlogid}">
+						<a href="/client/menu/mypage/traner/Trainer_info">내정보</a>
+					</c:when>
+				</c:choose>		
+			</li>
+		</c:if>
+		<li>
+			<c:choose>
+				<c:when test="${not empty sessionScope.ulogid}">
+					<a href="/client/menu/mypage/user/User_out_pwd">회원탈퇴</a>
+				</c:when>
+				<c:when test="${not empty sessionScope.tlogid}">
+					<a href="/client/menu/mypage/traner/Trainer_out_pwd">회원탈퇴</a>
+				</c:when>
+			</c:choose>
+		</li>
+		
+		<c:choose>
+			<c:when test="${not empty sessionScope.tlogid}">
+				<li>
+					<a href="/client/menu/mypage/traner/Trainer_health_register">매장등록신청</a>
+				</li>
+				<li>
+					<a href="/client/menu/mypage/traner/joinlist">유저관리</a>
+				</li>
+				<li>
+					<a href="/client/menu/mypage/traner/joinapplylist">신청유저</a>
+				</li>
+			</c:when>
+		</c:choose>
+		
+		<c:choose>
+			<c:when test="${not empty sessionScope.ulogid}">
+				<li>
+					<a href="/client/menu/mypage/user/User_mytrainer_info">트레이너 정보</a>
+				</li>
+				
+			</c:when>
+		</c:choose>
+		
+		
+		
+	</ul>
+</body>
+</html>

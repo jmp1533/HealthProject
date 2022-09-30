@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.L3_1team.health.mybatis.menu.service_noticeMapper">
+	
+	<resultMap type="com.L3_1team.health.dto.client.menu.service_notice_Dto" id="service_notice_Dto">
+		<result column="noti_num" property="noti_num"/>
+		<result column="admin_id" property="admin_id"/>
+		<result column="noti_title" property="noti_title"/>
+		<result column="noti_content" property="noti_content" jdbcType="CLOB" javaType="string"/>
+		<result column="noti_hits" property="noti_hits"/>
+		<result column="noti_date" property="noti_date"/>
+	</resultMap>
+
+	<select id="main" resultType="com.L3_1team.health.dto.client.menu.service_notice_Dto">
+		select * from
+			(select aa.*,rownum rnum from
+				(select * from notification
+					order by noti_num desc)aa
+				)where <![CDATA[ rnum>=1 and rnum<=5]]>
+	</select> 
+	
+	<!-- 전체리스트 -->
+	<select id="listall" resultType="com.L3_1team.health.dto.client.menu.service_notice_Dto">
+		select * from notification order by noti_num DESC
+	</select> 
+	
+	<select id="getCount" resultType="int">
+		select NVL(count(*),0) from
+		notification
+	</select>
+
+	<select id="list" parameterType="hashmap" resultType="com.L3_1team.health.dto.client.menu.service_notice_Dto">
+		select * from
+		(select aa.*,rownum rnum from(
+		select * from notification
+		order by noti_num desc)aa
+				<if test="field!=null">
+				 	where ${field} like '%' || #{keyword} || '%'
+				</if> 
+				
+		)where <![CDATA[ rnum>=#{startRow} and rnum<=#{endRow}]]>
+	</select>
+	
+	<!-- 상세보기 -->
+	<select id="getinfo" parameterType="int" resultMap="service_notice_Dto">
+		select * 
+		from notification
+		where noti_num=#{value}
+	</select>
+	
+	<!-- 조회수증가 -->
+	<update id="addhit" parameterType="int">
+		update notification
+		set noti_hits=noti_hits+1
+		where noti_num=#{value}
+	</update>
+	
+	<!-- 이전글 -->
+	<select id="prev" resultMap="service_notice_Dto">
+		select * from(
+			select * from notification 
+				<![CDATA[ where noti_num<#{value} ]]>
+			 order by noti_num desc 
+		) where rownum=1
+	</select>
+	
+	<!-- 다음글 -->
+	<select id="next" resultMap="service_notice_Dto">
+		select * from(
+			select * from notification
+				<![CDATA[ where noti_num>#{value} ]]>
+			 order by noti_num asc 
+		) where rownum=1
+	</select>
+	
+	<!-- 쓰기 -->
+	<insert id="insert" parameterType="com.L3_1team.health.dto.client.menu.service_notice_Dto">
+		insert into notification values(notification_SEQ.NEXTVAL,
+										#{admin_id},
+										#{noti_title},
+										#{noti_content},
+										#{noti_hits},
+										sysdate)
+	
+	</insert>
+	
+	
+	<!-- 수정 -->
+	<update id="update" parameterType="com.L3_1team.health.dto.client.menu.service_notice_Dto">
+		update notification
+		set noti_title=#{noti_title}, noti_content=#{noti_content}
+		where noti_num=#{noti_num} 
+	</update>
+	
+	
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="int">
+		delete from notification
+		where noti_num=#{value}
+	</delete>
+	
+	<!-- 검색 -->
+	<select id="search" resultType="int">
+		select NVL(count(*),0) from notification
+		<if test="field!=null">
+			where ${field} like '%' || #{keyword} || '%'
+		</if>
+	</select>
+	
+</mapper>

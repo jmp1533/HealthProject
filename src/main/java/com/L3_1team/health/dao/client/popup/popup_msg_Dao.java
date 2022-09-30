@@ -1,0 +1,54 @@
+package com.L3_1team.health.dao.client.popup;
+
+import java.util.HashMap;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.stereotype.Repository;
+
+import com.L3_1team.health.dto.client.popup.popup_msg_Dto;
+
+@Repository
+public class popup_msg_Dao {
+	@Inject
+	SqlSession sqlSession;
+
+	public void setSqlSession(SqlSession sqlSession) {
+		this.sqlSession = sqlSession;
+	}
+
+	public int insert(popup_msg_Dto msg_Dto) {
+		return sqlSession.insert("com.L3_1team.health.mybatis.popup.popup_msgMapper.insert", msg_Dto);
+	}
+
+	public int update(int msg_num) {
+		return sqlSession.update("com.L3_1team.health.mybatis.popup.popup_msgMapper.update", msg_num);
+	}
+
+	public int delete(int msg_num) {
+		return sqlSession.delete("com.L3_1team.health.mybatis.popup.popup_msgMapper.delete", msg_num);
+	}
+
+	public List<popup_msg_Dto> list(HashMap<String, Object> map) {
+		return sqlSession.selectList("com.L3_1team.health.mybatis.popup.popup_msgMapper.list", map);
+	}
+
+	public popup_msg_Dto search(int msg_num) {
+		return sqlSession.selectOne("com.L3_1team.health.mybatis.popup.popup_msgMapper.search", msg_num);
+	}
+
+	public popup_msg_Dto prev(HashMap<String, Object> map) {
+		return sqlSession.selectOne("com.L3_1team.health.mybatis.popup.popup_msgMapper.prev", map);
+	}
+
+	public popup_msg_Dto next(HashMap<String, Object> map) {
+		return sqlSession.selectOne("com.L3_1team.health.mybatis.popup.popup_msgMapper.next", map);
+	}
+
+	public int getCount(HashMap<String, Object> map) {
+		return sqlSession.selectOne("com.L3_1team.health.mybatis.popup.popup_msgMapper.getCount", map);
+	}
+
+}

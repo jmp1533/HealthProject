@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" 
+"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+
+<definition name=".client.menu.mypage.Mypage" template="/WEB-INF/views/client/menu/mypage/Mypage.jsp">
+</definition>
+
+<definition name=".client.menu.mypage.Update" template="/WEB-INF/views/client/menu/mypage/Update.jsp">
+</definition>
+
+<definition name=".client.menu.mypage.user.User_out_pwd" template="/WEB-INF/views/client/menu/mypage/user/User_out_pwd.jsp">
+</definition>
+
+<definition name=".client.menu.mypage.user.User_info" template="/WEB-INF/views/client/menu/mypage/user/User_info.jsp">
+</definition>
+
+<definition name=".client.menu.mypage.user.User_update" template="/WEB-INF/views/client/menu/mypage/user/User_update.jsp">
+</definition>
+
+<definition name=".client.menu.mypage.user.User_mytrainer_info" template="/WEB-INF/views/client/menu/mypage/user/User_mytrainer_info.jsp">
+</definition>
+
+
+
+<definition name=".client.menu.mypage.traner.Trainer_update" template="/WEB-INF/views/client/menu/mypage/traner/Trainer_update.jsp">
+</definition>
+
+<definition name=".client.menu.mypage.traner.Trainer_out_pwd" template="/WEB-INF/views/client/menu/mypage/traner/Trainer_out_pwd.jsp">
+</definition>
+
+<definition name=".client.menu.mypage.traner.Trainer_info" template="/WEB-INF/views/client/menu/mypage/traner/Trainer_info.jsp">
+</definition>
+
+<definition name=".client.menu.mypage.traner.Trainer_health_register" template="/WEB-INF/views/client/menu/mypage/traner/Trainer_health_register.jsp">
+</definition>
+
+<definition name=".client.menu.mypage.traner.health_view" template="/WEB-INF/views/client/menu/mypage/traner/health_view.jsp">
+</definition>
+
+<definition name=".client.menu.mypage.traner.health_update" template="/WEB-INF/views/client/menu/mypage/traner/health_update.jsp">
+</definition>
+
+
+
+<definition name=".client.menu.mypage.traner.joinlist" template="/WEB-INF/views/client/menu/mypage/traner/joinlist.jsp">
+</definition>
+
+<definition name=".client.menu.mypage.traner.view" template="/WEB-INF/views/client/menu/mypage/traner/view.jsp">
+</definition>
+
+<definition name=".client.menu.mypage.traner.joinapplylist" template="/WEB-INF/views/client/menu/mypage/traner/joinapplylist.jsp">
+</definition>
+
+<definition name=".client.menu.mypage.traner.applyview" template="/WEB-INF/views/client/menu/mypage/traner/applyview.jsp">
+</definition>
+
+
+
+
+
+</tiles-definitions>
+

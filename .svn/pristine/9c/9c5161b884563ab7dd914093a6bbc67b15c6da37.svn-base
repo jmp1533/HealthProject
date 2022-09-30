@@ -1,0 +1,79 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<div class="wrap">
+<div class="page_list"><%--200*800사이즈로 이미지 넣을것 제작 --%>
+	<div class="list_menu"><%--이미지 넣을땐 158*50 픽셀로 만들것! --%>
+		<div class="list_0"  style="background-color:white; padding: 10px; margin-top: 20px; margin-bottom: 20px;border-bottom-width:1px solid black;">
+			피플
+		</div>
+		<div class="list_1"><%--이미지 링크뒤에 글내용 바꾸고 크기 다시 조절해야함 --%>
+			<a href="/client/menu/people/traner/list" >트레이너 현황</a><%--이미지로 변경해서 각 페이지 초기값으로 링크 연결. --%>
+		</div>
+		<div class="list_2" style="background-color: red;">
+			<a href="/client/menu/people/user/list" >헬스 프렌드 찾기</a>
+		</div>
+	</div>
+	<img>
+</div>
+<div class="main">
+	<div class="list">
+		<h3>회원</h3>
+		<table >
+		<tr>
+			<th class="list_num">글번호</th>
+			<th class="list_title">제목</th>
+			<th class="list_id">작성자</th>
+			<th class="list_count">조회수</th>
+			<th class="list_date">작성일</th>
+		</tr>
+			<c:forEach var="dto" items="${list}">
+		<tr>
+			<td class="list_num">${dto.p_num }</td>
+			<td class="list_title"><a href="/client/menu/people/user/view?p_num=${dto.p_num }">${dto.p_title }</a></td>
+			<td class="list_id">${dto.id }</td>
+			<td class="list_count">${dto.p_hits }</td>
+			<td class="list_date">${dto.p_sportsdate }/${dto.p_sportstime }</td>
+		</tr>
+		<tr><td colspan="5"> <hr></td></tr>
+			</c:forEach>
+			</table>
+	</div>
+	<div class="list_number" style="text-align: center;"><!-- 페이징처리 -->
+		<c:choose>
+			<c:when test="${pu.startPageNum>10 }">
+				<a href="/client/menu/people/user/list?pageNum=${pu.startPageNum-1 }">[이전]</a>
+			</c:when>
+			<c:otherwise>
+			[이전]
+		</c:otherwise>
+		</c:choose>
+
+		<c:forEach var="i" begin="${pu.startPageNum }" end="${pu.endPageNum }">
+			<c:choose>
+				<c:when test="${i==pu.pageNum }">
+					<!--현재페이지만 빨간색으로 표시-->
+					<a href="/client/menu/people/user/list?pageNum=${i}"> <span
+						style="color: red">[${i }]</span>
+					</a>
+				</c:when>
+				<c:otherwise>
+					<a href="/client/menu/people/user/list?pageNum=${i}">[${i }]</a>
+				</c:otherwise>
+			</c:choose>
+		</c:forEach>
+
+		<c:choose>
+			<c:when test="${pu.endPageNum<pu.totalPageCount}">
+				<a
+					href="/client/menu/people/user/list?pageNum=${pu.endPageNum+1 }">[다음]</a>
+			</c:when>
+			<c:otherwise>
+			[다음]
+		</c:otherwise>
+		</c:choose>
+	</div>
+	<a href="/client/menu/people/user/write">글쓰기</a>
+</div>
+</div>
+</body>

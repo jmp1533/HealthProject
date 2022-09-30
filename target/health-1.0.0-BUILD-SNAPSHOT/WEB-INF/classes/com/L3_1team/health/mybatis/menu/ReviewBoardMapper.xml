@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.L3_1team.health.mybatis.menu.ReviewBoardMapper">
+<resultMap type="com.L3_1team.health.dto.client.menu.ReviewDto" id="DTO">
+		<!-- num 컬럼을 멤버변수 num과 매핑해라. -->
+		<result column="r_num" property="r_num"/>
+		<result column="id" property="id"/>
+		<result column="r_title" property="r_title"/>
+		<result column="r_content" property="r_content"
+					jdbcType="CLOB" javaType="string"/>
+		<result column="r_before_img" property="r_before_img"/>
+		<result column="r_after_img" property="r_after_img"/>
+		<result column="r_hits" property="r_hits"/>
+		<result column="count" property="count"/>
+		<result column="r_date" property="r_date"/>
+	</resultMap>
+	
+	<insert id="insert" parameterType="com.L3_1team.health.dto.client.menu.ReviewDto"  >
+		insert into review
+		values(review_seq.nextval,
+				#{id},
+				#{r_title},
+				sysdate,
+				#{r_before_img},
+				#{r_after_img},
+				#{r_content},
+				#{r_hits}
+				)
+	</insert>
+	
+	<update id="update" parameterType="com.L3_1team.health.dto.client.menu.ReviewDto">
+	  UPDATE review
+	               SET r_content=#{r_content},r_title=#{r_title},
+	               r_before_img=#{r_before_img},r_after_img=#{r_after_img}
+	               WHERE r_num=#{r_num} and id=#{id}
+	</update>	
+	
+	<select id="getCount" resultType="int">
+		select NVL(count(*),0) from review
+			<if test="field!=null">
+			 	where  ${field} like '%' || #{keyword} || '%'
+			</if>
+	</select>
+	
+	<select id="list" resultMap="DTO" >
+		select * from 
+			(select aa.*,rownum rnum from (
+				select r.r_num,r.id,r.r_title,r.r_date,r.r_before_img,r.r_after_img,r.r_content,r.r_hits, NVL(c.count,0) count 
+				from review r,(
+				 select count(*) count,r_num from reviewrecommend group by r_num) c
+				  where r.r_num=c.r_num(+) 
+				  	order by r.r_num desc)aa
+					<if test="field!=null">
+					 	where ${field} like '%' || #{keyword} || '%'
+					</if> 
+			)where <![CDATA[ rnum>=#{startRow} and rnum<=#{endRow} ]]>
+	</select>
+	
+	<select id="getInfo" resultMap="DTO">
+		select t.*, c.count from review t,
+		(select count(*) count from reviewrecommend  where r_num=#{value}) c where t.r_num=#{value}
+	</select>
+	
+	<update id="addHit" parameterType="int">
+		update review
+		set r_hits=r_hits+1
+		where r_num=#{value}
+	</update>
+	<delete id="r_delete" parameterType="hashmap">
+	delete from review where r_num=#{r_num} 
+		<if test="id!=null">
+			and id=#{id}
+		</if>
+	</delete>
+	<delete id="reple_delete"  parameterType="int">
+    delete from reviewreple where r_num=#{value}
+	</delete>	
+	<delete id="commend_delete"  parameterType="int">
+    delete from reviewrecommend where r_num=#{value}
+	</delete>	
+	
+	
+	<select id="getCount_reple" resultType="int" parameterType="int">
+		select NVL(count(*),0) from reviewreple where r_num=#{value}
+	</select>
+	<insert id="reple_insert" parameterType="com.L3_1team.health.dto.client.menu.Review_reple_Dto">
+   		insert into reviewreple values(reviewreple_SEQ.NEXTVAL,#{r_num},#{id},#{rre_content},sysdate)
+    </insert>
+	<select id="reple_list" parameterType="hashmap" resultType="com.L3_1team.health.dto.client.menu.Review_reple_Dto">
+				select * from
+				(select aa.*,rownum rnum from(
+					select * from reviewreple where r_num=#{r_num} 
+					order by rre_num desc)aa
+				)where <![CDATA[ rnum>=#{startRow} and rnum<=#{endRow}]]>
+	</select>
+	
+	<insert id="commend_insert" parameterType="hashmap">
+	INSERT INTO reviewrecommend VALUES(reviewrecommend_SEQ.NEXTVAL,#{r_num},#{id})
+	</insert>
+	<select id="commend_check" resultType="com.L3_1team.health.dto.category.commend_Dto">
+	select * from reviewrecommend where r_num=#{r_num} and id=#{id}
+	</select>
+	<select id="commend_select" parameterType="hashmap" resultType="int">
+	 select  NVL(count(*),0) from reviewrecommend where id=#{id} and r_num=#{r_num}
+	</select>
+	
+	<select id="prev" resultMap="DTO">
+		select * from(
+			select * from review
+				<![CDATA[where r_num<#{value}]]>
+				order by r_num desc
+			)where rownum=1
+	</select>
+
+	<select id="next" resultMap="DTO">
+		select * from(
+			select * from review
+				<![CDATA[where r_num>#{value}]]>
+				order by r_num asc
+			)where rownum=1
+	</select>
+	
+</mapper>

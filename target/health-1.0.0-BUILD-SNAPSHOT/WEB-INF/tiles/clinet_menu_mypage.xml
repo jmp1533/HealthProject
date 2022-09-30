@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" 
+"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+
+<definition name=".client.menu.mypage.Mypage" template="/WEB-INF/views/health/main/layout.jsp">
+	<put-attribute name="content" value="/WEB-INF/views/client/menu/mypage/Mypage.jsp"></put-attribute>
+</definition>
+
+<definition name=".client.menu.mypage.Update" template="/WEB-INF/views/health/main/layout.jsp">
+	<put-attribute name="content" value="/WEB-INF/views/client/menu/mypage/Update.jsp"></put-attribute>
+</definition>
+
+<definition name=".client.menu.mypage.user.User_out_pwd" template="/WEB-INF/views/health/main/layout.jsp">
+	<put-attribute name="content" value="/WEB-INF/views/client/menu/mypage/user/User_out_pwd.jsp"></put-attribute>
+</definition>
+
+<definition name=".client.menu.mypage.user.User_info" template="/WEB-INF/views/health/main/layout.jsp">
+	<put-attribute name="content" value="/WEB-INF/views/client/menu/mypage/user/User_info.jsp"></put-attribute>
+</definition>
+
+<definition name=".client.menu.mypage.user.User_update" template="/WEB-INF/views/health/main/layout.jsp">
+	<put-attribute name="content" value="/WEB-INF/views/client/menu/mypage/user/User_update.jsp"></put-attribute>
+</definition>
+
+<definition name=".client.menu.mypage.user.User_mytrainer_info" template="/WEB-INF/views/health/main/layout.jsp">
+	<put-attribute name="content" value="/WEB-INF/views/client/menu/mypage/user/User_mytrainer_info.jsp"></put-attribute>
+</definition>
+
+
+
+<definition name=".client.menu.mypage.traner.Trainer_update" template="/WEB-INF/views/health/main/layout.jsp">
+	<put-attribute name="content" value="/WEB-INF/views/client/menu/mypage/traner/Trainer_update.jsp"></put-attribute>
+</definition>
+
+<definition name=".client.menu.mypage.traner.Trainer_out_pwd" template="/WEB-INF/views/health/main/layout.jsp">
+	<put-attribute name="content" value="/WEB-INF/views/client/menu/mypage/traner/Trainer_out_pwd.jsp"></put-attribute>
+</definition>
+
+<definition name=".client.menu.mypage.traner.Trainer_info" template="/WEB-INF/views/health/main/layout.jsp">
+	<put-attribute name="content" value="/WEB-INF/views/client/menu/mypage/traner/Trainer_info.jsp"></put-attribute>
+</definition>
+
+<definition name=".client.menu.mypage.traner.Trainer_health_register" template="/WEB-INF/views/health/main/layout.jsp">
+	<put-attribute name="content" value="/WEB-INF/views/client/menu/mypage/traner/Trainer_health_register.jsp"></put-attribute>
+</definition>
+
+<definition name=".client.menu.mypage.traner.health_view" template="/WEB-INF/views/health/main/layout.jsp">
+	<put-attribute name="content" value="/WEB-INF/views/client/menu/mypage/traner/health_view.jsp"></put-attribute>
+</definition>
+
+<definition name=".client.menu.mypage.traner.health_update" template="/WEB-INF/views/health/main/layout.jsp">
+	<put-attribute name="content" value="/WEB-INF/views/client/menu/mypage/traner/health_update.jsp"></put-attribute>
+</definition>
+
+
+
+<definition name=".client.menu.mypage.traner.joinlist" template="/WEB-INF/views/health/main/layout.jsp">
+	<put-attribute name="content" value="/WEB-INF/views/client/menu/mypage/traner/joinlist.jsp"></put-attribute>
+</definition>
+
+<definition name=".client.menu.mypage.traner.view" template="/WEB-INF/views/health/main/layout.jsp">
+	<put-attribute name="content" value="/WEB-INF/views/client/menu/mypage/traner/view.jsp"></put-attribute>
+</definition>
+
+<definition name=".client.menu.mypage.traner.joinapplylist" template="/WEB-INF/views/health/main/layout.jsp">
+	<put-attribute name="content" value="/WEB-INF/views/client/menu/mypage/traner/joinapplylist.jsp"></put-attribute>
+</definition>
+
+<definition name=".client.menu.mypage.traner.applyview" template="/WEB-INF/views/health/main/layout.jsp">
+	<put-attribute name="content" value="/WEB-INF/views/client/menu/mypage/traner/applyview.jsp"></put-attribute>
+</definition>
+</tiles-definitions>

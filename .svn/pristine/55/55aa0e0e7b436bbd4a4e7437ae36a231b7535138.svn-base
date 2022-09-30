@@ -1,0 +1,83 @@
+package com.L3_1team.health.dto.client.menu;
+
+import java.sql.Timestamp;
+
+public class ReviewDto {
+	private int r_num;
+	private String id;
+	private String r_title;
+	private Timestamp r_date;
+	private String r_before_img;
+	private String r_after_img;
+	private String r_content;
+	private int r_hits;
+	private int count;
+	public ReviewDto(){}
+	public ReviewDto(int r_num, String id, String r_title, Timestamp r_date,
+			String r_before_img, String r_after_img, String r_content,
+			int r_hits, int count) {
+		this.r_num = r_num;
+		this.id = id;
+		this.r_title = r_title;
+		this.r_date = r_date;
+		this.r_before_img = r_before_img;
+		this.r_after_img = r_after_img;
+		this.r_content = r_content;
+		this.r_hits = r_hits;
+		this.count = count;
+	}
+	public int getR_num() {
+		return r_num;
+	}
+	public void setR_num(int r_num) {
+		this.r_num = r_num;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getR_title() {
+		return r_title;
+	}
+	public void setR_title(String r_title) {
+		this.r_title = r_title;
+	}
+	public Timestamp getR_date() {
+		return r_date;
+	}
+	public void setR_date(Timestamp r_date) {
+		this.r_date = r_date;
+	}
+	public String getR_before_img() {
+		return r_before_img;
+	}
+	public void setR_before_img(String r_before_img) {
+		this.r_before_img = r_before_img;
+	}
+	public String getR_after_img() {
+		return r_after_img;
+	}
+	public void setR_after_img(String r_after_img) {
+		this.r_after_img = r_after_img;
+	}
+	public String getR_content() {
+		return r_content;
+	}
+	public void setR_content(String r_content) {
+		this.r_content = r_content;
+	}
+	public int getR_hits() {
+		return r_hits;
+	}
+	public void setR_hits(int r_hits) {
+		this.r_hits = r_hits;
+	}
+	public int getCount() {
+		return count;
+	}
+	public void setCount(int count) {
+		this.count = count;
+	}
+}

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.L3_1team.health.mybatis.menu.community_border_freeMapper">
+	<resultMap type="com.L3_1team.health.dto.client.menu.Community_border_free_Dto" id="DTO">
+		<!-- num 컬럼을 멤버변수 num과 매핑해라. -->
+		<result column="free_num" property="free_num"/>
+		<result column="id" property="id"/>
+		<result column="f_title" property="f_title"/>
+		<result column="f_content" property="f_content"
+					jdbcType="CLOB" javaType="string"/>
+		<result column="f_date" property="f_date"/>
+		<result column="f_hits" property="f_hits"/>
+		<result column="count" property="count"/>
+	</resultMap>
+	
+	<select id="listall" resultMap="DTO">
+		select * from freetitle
+	</select>
+	
+	<select id="getinfo" parameterType="int" resultMap="DTO">
+		select t.*, c.count 
+		from freetitle t,(select count(*) count from freerecommend  where free_num=#{value}) c where t.free_num=#{value} 
+	</select>
+	
+	
+	<update id="hitupdate"  parameterType="int" >
+	 update freetitle set f_hits=f_hits+1 where free_num=#{value}
+	</update>
+	
+ <insert id="insert" parameterType="com.L3_1team.health.dto.client.menu.Community_border_free_Dto">
+   INSERT INTO freetitle VALUES(freetitle_SEQ.NEXTVAL,#{id},#{f_title},#{f_content},sysdate,#{f_hits})
+    </insert>
+	
+<update id="update">
+  UPDATE freetitle
+               SET f_content=#{f_content},f_title=#{f_title}
+               WHERE free_num=#{free_num} and id=#{id}
+  
+</update>	
+	
+	<select id="getCount" resultType="int">
+		select NVL(count(*),0) from freetitle
+			<if test="field!=null">
+			 	where  ${field} like '%' || #{keyword} || '%'
+			</if>
+	</select>
+	<!-- 이전글 -->
+	<select id="prev" resultMap="DTO">
+		select * from(
+			select * from freetitle 
+				<![CDATA[ where free_num<#{value} ]]>
+			 order by free_num desc 
+		) where rownum=1
+	</select>
+	
+	<!-- 다음글 -->
+	<select id="next" resultMap="DTO">
+		select * from(
+			select * from freetitle
+				<![CDATA[ where free_num>#{value} ]]>
+			 order by free_num asc 
+		) where rownum=1
+	</select>
+		
+	<select id="getCount_reple" resultType="int" parameterType="int">
+		select NVL(count(*),0) from freereple where free_num=#{value}
+	</select>
+	
+	
+	<select id="list" parameterType="hashmap" resultMap="DTO">
+		select * from
+			(select aa.*,rownum rnum from(
+				select t.free_num ,t.id,t.f_title,t.f_date,t.f_hits , NVL(c.count,0) count
+                 from freetitle t,(
+                    select count(*) count,free_num  from freerecommend group by free_num) c 
+                       where t.free_num=c.free_num(+)  
+           		order by t.free_num desc)aa
+           			<if test="field!=null">
+					 	where ${field} like '%' || #{keyword} || '%'
+					</if> 
+			)where <![CDATA[ rnum>=#{startRow} and rnum<=#{endRow}]]>
+	</select>
+	
+	
+    <insert id="reple_insert" parameterType="com.L3_1team.health.dto.client.menu.Community_border_free_reple_Dto">
+   insert into freereple values(freereple_SEQ.NEXTVAL,#{free_num},#{id},#{fr_content},sysdate)
+    </insert>
+    
+<select id="reple_list" parameterType="hashmap" resultType="com.L3_1team.health.dto.client.menu.Community_border_free_reple_Dto">
+			select * from
+			(select aa.*,rownum rnum from(
+				select * from freereple where free_num=#{free_num} 
+				order by fr_num desc)aa
+			)where <![CDATA[ rnum>=#{startRow} and rnum<=#{endRow}]]>
+</select>
+	
+	
+<delete id="free_delete" parameterType="hashmap">
+  delete from freetitle where free_num=#{free_num} 
+  	<if test="id!=null">
+  		and id=#{id}
+  	</if>
+</delete>
+<delete id="reple_delete"  parameterType="int">
+  delete from freereple where free_num=#{value}
+</delete>	
+	<delete id="commend_delete"  parameterType="int">
+  delete from freerecommend where free_num=#{value}
+</delete>	
+
+<!--  	<select id="commend_count"  parameterType="int" resultType="int">
+	select NVL(count(*),0) from freerecommend where free_num=#{value}
+	</select> -->
+	
+	<insert id="commend_insert" parameterType="hashmap">
+	INSERT INTO freerecommend VALUES(freerecommend_SEQ.NEXTVAL,#{free_num},#{id})
+	</insert>
+	<select id="commend_check" resultType="com.L3_1team.health.dto.category.commend_Dto">
+	select * from freerecommend where free_num=#{free_num} and id=#{id}
+	</select>
+	<select id="commend_select" parameterType="hashmap" resultType="int">
+	 select  NVL(count(*),0) from freerecommend where id=#{id} and free_num=#{free_num}
+	</select>
+</mapper>

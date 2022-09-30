@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.L3_1team.health.mybatis.menu.health_movieMapper">
+	<resultMap type="com.L3_1team.health.dto.client.menu.Health_movie_Dto" id="Health_movie_Dto">
+		<!-- num 컬럼:멤버변수num -->
+		<result column="v_num" property="v_num"/>
+		<result column="admin_id" property="admin_id"/>
+		<result column="vcate_num" property="vcate_num"/>
+		<result column="v_title" property="v_title"/>
+		<result column="v_link" property="v_link"/>
+		<result column="v_image" property="v_image"/>
+		<result column="v_content" property="v_content"
+					jdbcType="CLOB" javaType="string"/>
+		<result column="v_hits" property="v_hits"/>
+	</resultMap>
+	
+	<insert id="insert" >
+		insert into video
+		values(video_seq.nextval,
+				#{admin_id},
+				#{vcate_num },
+				#{v_title},
+				#{v_link },
+				#{v_image },
+				#{v_content},
+				#{v_hits}
+				)	
+	</insert>
+	
+	<update id="update" parameterType="com.L3_1team.health.dto.client.menu.Health_movie_Dto">
+		update video 
+			set vcate_num=#{vcate_num}, 
+				v_title=#{v_title}, 
+				v_link=#{v_link},
+				v_image=#{v_image},
+				v_content=#{v_content}
+		 where v_num = #{v_num} 
+	</update>
+	
+	<select id="getCount" resultType="int">
+		select NVL(count(*),0) from video
+		<where>
+			<if test="vcate_num!=0">
+			 	vcate_num=#{vcate_num}
+			</if>
+			<if test="field!=null">
+			 	and ${field} like '%' || #{keyword} || '%'
+			</if>
+		</where>
+	</select>
+	
+	<select id="search_list"  resultMap="Health_movie_Dto">
+		select * from (
+		  select aa.*,rownum rnum from(
+			select * from video
+			<if test="vcate_num!=0">
+			 	where vcate_num=#{vcate_num} 
+			</if> 
+			order by v_num desc)aa
+			<if test="field!=null">
+			 	where ${field} like '%' || #{keyword} || '%'
+			</if> 
+		)where <![CDATA[ rnum>=#{startRow} and rnum<=#{endRow} ]]>
+			
+	</select>
+	
+	<select id="getInfo" resultMap="Health_movie_Dto">
+		select * from video
+		where v_num=#{value}
+	</select>
+	
+	<update id="addHit">
+		update video
+		set v_hits=v_hits+1
+		where v_num=#{value}
+	</update>
+	
+	<select id="vcate" resultType="com.L3_1team.health.dto.category.Health_Category_Dto">
+		select * from videocategory
+	</select>
+	
+	<delete id="delete" parameterType="int">
+		delete from video where v_num=#{value}
+	</delete>
+	<!-- 
+	<select id="prev" resultMap="video">
+		select * from (
+    		select * from video 
+    			<![CDATA[ where v_num<#{value}  ]]>
+    		order by v_num desc 
+		)where rownum=1
+	</select>
+	<select id="next" resultMap="video">
+		select * from (
+    		select * from video 
+    			<![CDATA[ where v_num>#{value}  ]]>
+    		order by v_num asc
+		)where rownum=1
+	</select>
+	 -->
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

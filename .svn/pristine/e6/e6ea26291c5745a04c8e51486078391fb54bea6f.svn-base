@@ -1,0 +1,118 @@
+package com.L3_1team.health.controller.client.menu;
+
+import java.util.HashMap;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.L3_1team.health.Utility.Page.PageUtil;
+import com.L3_1team.health.dto.client.menu.People_traner_Dto;
+import com.L3_1team.health.service.client.menu.People_traner_Service;
+
+@Controller
+public class People_traner_Controller {
+	@Inject
+	private People_traner_Service tranerService;
+
+	public void setTranerService(People_traner_Service tranerService) {
+		this.tranerService = tranerService;
+	}
+	
+	@RequestMapping(value = "/Joincheck", method = RequestMethod.GET)
+	@ResponseBody
+	public String join(HttpServletRequest request, HttpServletResponse response){
+		
+		String t_id = request.getParameter("tid");
+		String tlogid = (String)request.getSession().getAttribute("tlogid");
+		String ulogid = (String)request.getSession().getAttribute("ulogid");
+		String id = (String)request.getSession().getAttribute("id");
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+		sb.append("<join>");
+		
+		if(id==null){
+			//로그인 하세요.
+			sb.append("<msg>login gogo</msg>");
+			return sb.toString();
+		}	
+		
+		if(tlogid!=null){
+			//트레이너는 신청불가
+			sb.append("<msg>trainer nono</msg>");
+			return sb.toString();
+		}
+		
+		int mcount =tranerService.managecount(ulogid);
+		
+		if(mcount>0){
+			sb.append("<msg>manage o</msg>");
+			return sb.toString();
+		}
+		
+		int jc = tranerService.joincount(ulogid);
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("u_id", ulogid);
+		map.put("t_id", t_id);
+		int js = tranerService.joinsearch(map);
+
+		if(js==0 && (0<=jc && jc<5)){
+			//신청완료
+			tranerService.joininsert(map);
+			sb.append("<msg>success</msg>");
+		}
+		if(js == 1){
+			//진행중...
+			sb.append("<msg>jung...</msg>");
+		}
+		
+		if(jc>=5){
+			//5명이상 신청불가...
+			sb.append("<msg>5 nonono</msg>");
+		}
+	
+		sb.append("</join>");
+		return sb.toString();
+	}
+	
+	@RequestMapping(value = "/client/menu/people/traner/list", method = RequestMethod.GET)
+	public ModelAndView list(
+			@RequestParam(value = "pageNum", defaultValue = "1") int pageNum) {
+		ModelAndView mv = new ModelAndView(".client.menu.people.traner.list");
+		
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		map.put("t_out", 1);
+		map.put("t_condition", 1);
+		int totalRowCount = tranerService.getCount(map);
+
+		PageUtil pu = new PageUtil(pageNum, totalRowCount, 9, 10);
+		List<People_traner_Dto> list1 = tranerService.listall();
+
+		map.put("startRow", pu.getStartRow());
+		map.put("endRow", pu.getEndRow());
+		// 현재페이지의 글들 얻어오기
+		List<People_traner_Dto> list = tranerService.list(map);
+
+		mv.addObject("list", list);
+		mv.addObject("pu", pu);
+		return mv;
+	}
+
+	@RequestMapping(value = "/client/menu/people/traner/view", method = RequestMethod.GET)
+	public String getinfo(@RequestParam("id") String id, Model model) {
+		People_traner_Dto dto = tranerService.getinfo(id);
+		model.addAttribute("dto", dto);
+		return ".client.menu.people.traner.view";
+	}
+	
+}

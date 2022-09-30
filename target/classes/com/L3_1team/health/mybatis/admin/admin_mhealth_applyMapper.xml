@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.L3_1team.health.mybatis.admin.admin_mhealth_applyMapper">
+	<!-- list -->
+	<select id="list" parameterType="hashmap" resultType="com.L3_1team.health.dto.client.menu.Finder_company_Dto">
+		select * from
+		(select aa.*,rownum rnum from(
+		select * from business where b_condition=2
+		order by b_num desc)aa
+					<if test="field!=null">
+					 	where ${field} like '%' || #{keyword} || '%'
+					</if> 
+		)where <![CDATA[ rnum>=#{startRow} and rnum<=#{endRow}]]>
+	</select>
+	
+	<select id="getCount" resultType="int">
+		select NVL(count(*),0) from business
+	</select>
+	
+	
+	
+	<!-- 검색 -->
+	<select id="search" resultType="int">
+		select NVL(count(*),0) from business
+		<if test="field!=null">
+			where ${field} like '%' || #{keyword} || '%'
+		</if>
+	</select>
+
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="int">
+		delete from business
+		where b_num=#{value}
+	</delete>
+	
+	<!-- img -->
+	<select id="img" parameterType="int" resultType="String">
+		select bi_img
+		from businessimg
+		where b_num=#{value}
+	</select>
+	
+	<delete id="imgdel" parameterType="int">
+		delete from businessimg
+		where b_num=#{value}
+	</delete>
+	
+	
+	<!-- 상세보기 -->
+	<select id="getinfo" parameterType="int" resultType="com.L3_1team.health.dto.admin.admin_mhealth_business_Dto">
+		select * 
+		from business
+		where b_num=#{value}
+	</select>
+	
+	<select id="getinfoimg" parameterType="int" resultType="String">
+		select bi_img
+		from businessimg
+		where b_num=#{value}
+	</select>
+	
+	<!-- 등록 -->
+	<update id="update" parameterType="com.L3_1team.health.dto.admin.admin_mhealth_business_Dto">
+		update business
+		set b_x=#{b_x}, b_y=#{b_y}, b_condition=1
+		where b_num=#{b_num}
+	</update>
+	
+</mapper>

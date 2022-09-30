@@ -1,0 +1,37 @@
+package com.L3_1team.health.dao.user;
+
+import java.util.HashMap;
+
+import javax.inject.Inject;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.stereotype.Repository;
+
+import com.L3_1team.health.dto.client.user.UserDto;
+
+@Repository
+public class AccountFinderDao {
+	@Inject
+	private SqlSession sqlSession;
+
+	public void setSqlSession(SqlSession sqlSession) {
+		this.sqlSession = sqlSession;
+	}
+	
+	public String getUserId(HashMap<String, String> map){
+		return sqlSession.selectOne("com.L3_1team.health.mybatis.user.AccountFindMapper.user_findId",map);
+	}
+	public UserDto getUserInfo(HashMap<String, String> map){
+		return sqlSession.selectOne("com.L3_1team.health.mybatis.user.AccountFindMapper.userInfo",map);
+	}
+	public UserDto userChangePwd(HashMap<String, String> map){
+		return sqlSession.selectOne("com.L3_1team.health.mybatis.user.AccountFindMapper.user_changePwd",map);
+	}
+	
+	public String getTrainerId(HashMap<String, String> map){
+		return sqlSession.selectOne("com.L3_1team.health.mybatis.user.AccountFindMapper.trainer_findId",map);
+	}
+	public String getTrainerPwd(HashMap<String, String> map){
+		return sqlSession.selectOne("com.L3_1team.health.mybatis.user.AccountFindMapper.trainer_findPwd",map);
+	}
+}

@@ -1,0 +1,70 @@
+package com.L3_1team.health.dto.client.menu;
+
+import java.sql.Timestamp;
+
+public class Community_border_free_Dto {
+  private int free_num;
+  
+  private String id;
+  private String f_title;
+  private String f_content;
+  private Timestamp f_date;
+  private int f_hits;
+  private int count;
+
+  public Community_border_free_Dto(){}
+
+public Community_border_free_Dto(int free_num, String id, String f_title,
+		String f_content, Timestamp f_date, int f_hits) {
+	super();
+	this.free_num = free_num;
+	this.id = id;
+	this.f_title = f_title;
+	this.f_content = f_content;
+	this.f_date = f_date;
+	this.f_hits = f_hits;
+}
+public int getFree_num() {
+	return free_num;
+}
+public void setFree_num(int free_num) {
+	this.free_num = free_num;
+}
+public String getId() {
+	return id;
+}
+public void setId(String id) {
+	this.id = id;
+}
+public String getF_title() {
+	return f_title;
+}
+public void setF_title(String f_title) {
+	this.f_title = f_title;
+}
+public String getF_content() {
+	return f_content;
+}
+public void setF_content(String f_content) {
+	this.f_content = f_content;
+}
+public Timestamp getF_date() {
+	return f_date;
+}
+public void setF_date(Timestamp f_date) {
+	this.f_date = f_date;
+}
+public int getF_hits() {
+	return f_hits;
+}
+public void setF_hits(int f_hits) {
+	this.f_hits = f_hits;
+}
+  
+public int getCount() {
+	return count;
+}
+public void setCount(int count) {
+	this.count = count;
+}
+}

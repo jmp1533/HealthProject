@@ -1,0 +1,58 @@
+package com.L3_1team.health.dao.client.menu;
+
+import java.util.HashMap;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.stereotype.Repository;
+
+import com.L3_1team.health.dto.category.Health_Category_Dto;
+import com.L3_1team.health.dto.client.menu.Health_movie_Dto;
+
+@Repository
+public class Health_movie_Dao {
+	@Inject
+	private SqlSession sqlSession;
+	public void setSqlSession(SqlSession sqlSession) {
+		this.sqlSession = sqlSession;
+	}
+	public int insert(Health_movie_Dto dto){
+		return sqlSession.insert("com.L3_1team.health.mybatis.menu.health_movieMapper.insert",dto);
+	}
+	public int getCount(HashMap<String,String> map){
+		return sqlSession.selectOne("com.L3_1team.health.mybatis.menu.health_movieMapper.getCount",map);
+	}
+	public List<Health_movie_Dto> search_list(HashMap<String,String> map){
+		return sqlSession.selectList("com.L3_1team.health.mybatis.menu.health_movieMapper.search_list",map);
+	}
+	public List<Health_movie_Dto> cate_list(HashMap<String,Integer> map){
+		return sqlSession.selectList("com.L3_1team.health.mybatis.menu.health_movieMapper.list",map);
+	}
+	public Health_movie_Dto view(int num){
+		return sqlSession.selectOne("com.L3_1team.health.mybatis.menu.health_movieMapper.getInfo",num);
+	}
+	public int addHit(int num){
+		return sqlSession.update("com.L3_1team.health.mybatis.menu.health_movieMapper.addHit",num);
+	}
+	public List<Health_Category_Dto> vcate(){
+		return sqlSession.selectList("com.L3_1team.health.mybatis.menu.health_movieMapper.vcate");
+	}
+	/*
+	public Health_movie_Dto prev(int num){
+		return sqlSession.selectOne("com.L3_1team.health.mybatis.menu.health_movieMapper.prev",num);
+	}
+	public Health_movie_Dto next(int num){
+		return sqlSession.selectOne("com.L3_1team.health.mybatis.menu.health_movieMapper.next",num);
+	}
+	 */
+}
+
+
+
+
+
+
+
+

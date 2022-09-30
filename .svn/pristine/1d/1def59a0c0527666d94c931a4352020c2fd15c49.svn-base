@@ -1,0 +1,29 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<div align="center" style="background-color: yellow; height: 580px">
+	<form method="post" action="/client/popup/info/Userinfo">
+		<input type="hidden" value="${sessionScope.ulogid}" id="u_id" name="u_id"/>
+	
+		<img src="/resources/images/diet.jpg"/>
+		<br/><br/><br/>
+	
+		<label for="ui_height">키  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </label>
+		<input type="text" id="ui_height" name="ui_height" size="20px"/>
+		
+		<label for="weight">몸무게 : </label>
+		<input type="text" id="ui_weight" name="ui_weight" size="20px"/>
+		<br/><br/>
+		
+		<input type="submit" value="입력" onclick="window.close()"/>
+		<input type="button" value="닫기" onclick="window.close()"/>
+	</form>
+</div>
+</body>
+</html>

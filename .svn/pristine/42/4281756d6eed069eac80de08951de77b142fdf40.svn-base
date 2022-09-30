@@ -1,0 +1,191 @@
+package com.L3_1team.health.controller.admin;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.L3_1team.health.Utility.Page.PageUtil;
+import com.L3_1team.health.dto.category.Health_Category_Dto;
+import com.L3_1team.health.dto.client.menu.Health_movie_Dto;
+import com.L3_1team.health.service.admin.admin_mboard_movie_Service;
+
+@Controller
+public class admin_mboard_movie_Comtroller {
+	@Inject private admin_mboard_movie_Service service;
+
+	public void setService(admin_mboard_movie_Service service) {
+		this.service = service;
+	}
+	
+	@RequestMapping(value = "/admin/mboard/movie/health_movie_insert", method=RequestMethod.GET)
+	public ModelAndView insertForm(){
+		ModelAndView mv=new ModelAndView(".admin.mboard.movie.health_movie_insert");
+		return mv;
+	}
+	
+	@RequestMapping(value = "/admin/mboard/movie/health_movie_insert", method=RequestMethod.POST)
+	public String insert(@ModelAttribute("movie_dto")Health_movie_Dto movie_dto, Model model,
+			HttpServletRequest request, HttpSession session, MultipartFile file1){
+		
+		String orgfilename = file1.getOriginalFilename();
+		String savefilename = UUID.randomUUID() + "_" + orgfilename;
+		String path = session.getServletContext().getRealPath("/resources/upload");
+		FileOutputStream fos = null;
+		InputStream is = null;
+		
+		try {
+			fos = new FileOutputStream(path + "/" + savefilename);
+			is = file1.getInputStream();
+			FileCopyUtils.copy(is, fos);
+			System.out.println("파일업로드 성공");
+			
+			String admin_id = (String)request.getSession().getAttribute("adminid");
+			//admin_id
+			movie_dto.setAdmin_id("admin");
+			
+			String link = movie_dto.getV_link().split("\\=")[1];
+			movie_dto.setV_link("http://www.youtube.com/embed/" + link);
+			
+			movie_dto.setV_image(savefilename);
+			
+			int n = service.insert(movie_dto);
+			
+			if(n>0){
+				return "redirect:/admin/mboard/movie/health_movie_list";
+			}else{
+				File file = new File(path + "/" + savefilename);
+				file.delete();
+				return ".admin.mboard.movie.health_movie_insert";
+			}
+		} catch (Exception ie) {
+			return ".admin.mboard.movie.health_movie_insert";
+		} finally {
+			try {
+				if (is != null)is.close();
+				if (fos != null)fos.close();
+			} catch (IOException ie) {}
+		}
+	}
+	
+	@RequestMapping(value = "/admin/mboard/movie/update", method=RequestMethod.GET)
+	public ModelAndView updateForm(@RequestParam("v_num")int v_num){
+		ModelAndView mv=new ModelAndView(".admin.mboard.movie.update");
+		Health_movie_Dto movie_Dto = service.view(v_num);
+		mv.addObject("movie_Dto", movie_Dto);
+		return mv;
+	}
+	
+	@RequestMapping(value = "/admin/mboard/movie/update", method=RequestMethod.POST)
+	public String update(@ModelAttribute("movie_dto")Health_movie_Dto movie_dto, Model model,
+			HttpServletRequest request, HttpSession session, MultipartFile file1){
+		
+		String orgfilename = file1.getOriginalFilename();
+		String savefilename = UUID.randomUUID() + "_" + orgfilename;
+		String path = session.getServletContext().getRealPath("/resources/upload");
+		FileOutputStream fos = null;
+		InputStream is = null;
+		
+		try {
+			fos = new FileOutputStream(path + "/" + savefilename);
+			is = file1.getInputStream();
+			FileCopyUtils.copy(is, fos);
+			System.out.println("파일업로드 성공");
+			String admin_id = (String)request.getSession().getAttribute("adminid");
+			//admin_id
+			movie_dto.setAdmin_id("admin");
+			System.out.println(movie_dto.getV_link());
+			String link = movie_dto.getV_link().split("\\=")[1];
+			System.out.println(1);
+			movie_dto.setV_link("http://www.youtube.com/embed/" + link);
+			
+			movie_dto.setV_image(savefilename);
+			int n = service.update(movie_dto);
+			
+			if(n>0){
+				return "redirect:/admin/mboard/movie/health_movie_list";
+			}else{
+				File file = new File(path + "/" + savefilename);
+				file.delete();
+				return ".admin.mboard.movie.health_movie_insert";
+			}
+		} catch (Exception ie) {
+			return ".admin.mboard.movie.health_movie_insert";
+		} finally {
+			try {
+				if (is != null)is.close();
+				if (fos != null)fos.close();
+			} catch (IOException ie) {}
+		}
+	}
+	
+	@RequestMapping("/admin/mboard/movie/health_movie_view")
+	public ModelAndView detail(@RequestParam("num")int num){
+		Health_movie_Dto dto=service.view(num);
+		ModelAndView mv=new ModelAndView(".admin.mboard.movie.health_movie_view");
+		mv.addObject("dto",dto);
+		return mv;
+	}
+	
+	@RequestMapping(value="/admin/mboard/movie/health_movie_list",method=RequestMethod.GET)
+	public ModelAndView serach_list(@RequestParam(value="pageNum",defaultValue="1")int pageNum,
+			@RequestParam(value="cateNum",defaultValue="0")int cateNum,
+			@RequestParam(value="field",required=false)String field,
+			@RequestParam(value="keyword",required=false)String keyword
+			){
+		if (field==null && keyword==null) {
+			field="admin_id";
+			keyword="";
+		}
+		HashMap<String, String> map1=new HashMap<String, String>();
+		map1.put("vcate_num", Integer.toString(cateNum));
+		map1.put("field", field);
+		map1.put("keyword", keyword);
+		int totalRowCount=service.getCount(map1);
+		PageUtil pu=new PageUtil(pageNum, totalRowCount, 10,10);
+		HashMap<String,String> map=new HashMap<String, String>();
+		map.put("startRow",Integer.toString(pu.getStartRow()));
+		map.put("endRow",Integer.toString(pu.getEndRow()));
+		map.put("vcate_num", Integer.toString(cateNum));
+		map.put("field", field);
+		map.put("keyword", keyword);
+		List<Health_movie_Dto> list=service.search_list(map);
+		List<Health_Category_Dto> vcate=service.vcate();
+		ModelAndView mv=new ModelAndView(".admin.mboard.movie.health_movie_list");
+		mv.addObject("list",list);
+		mv.addObject("vcate",vcate);
+		mv.addObject("field", field);
+		mv.addObject("keyword", keyword);
+		mv.addObject("pu",pu);
+		mv.addObject("cateNum",cateNum);
+		return mv;
+	}
+	
+	@RequestMapping(value="/admin/mboard/movie/delete", method = RequestMethod.POST)
+	  public String applyupdate(HttpServletRequest request, Model model){
+		String delck[] = request.getParameterValues("delck");
+
+		for(int i=0; i<delck.length; i++){
+			int v_num = Integer.parseInt(delck[i].toString());
+			service.delete(v_num);
+		}
+		return "redirect:/admin/mboard/movie/health_movie_list";
+	}
+}

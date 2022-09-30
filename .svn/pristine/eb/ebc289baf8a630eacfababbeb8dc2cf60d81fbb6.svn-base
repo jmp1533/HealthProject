@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" 
+"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+
+<definition name=".client.popup.info.Userinfo" template="/WEB-INF/views/client/popup/info/Userinfo.jsp">
+</definition>
+
+<definition name=".client.popup.msg.msginsert" template="/WEB-INF/views/client/popup/msg/msginsert.jsp">
+</definition>
+
+<definition name=".client.popup.msg.msglist" template="/WEB-INF/views/client/popup/msg/msglist.jsp">
+</definition>
+
+<definition name=".client.popup.msg.msgview" template="/WEB-INF/views/client/popup/msg/msgview.jsp">
+</definition>
+
+
+</tiles-definitions>
+

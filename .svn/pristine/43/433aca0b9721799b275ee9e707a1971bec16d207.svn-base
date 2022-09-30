@@ -1,0 +1,95 @@
+package com.L3_1team.health.dto.admin;
+
+import java.sql.Timestamp;
+
+public class admin_mservice_qna_Dto {
+	private int qcate_num;
+	private String qcate_name;
+	private int q_num;
+	private String id;
+	private String q_title;
+	private String q_content;
+	private String q_img;
+	private Timestamp q_date;
+	
+	public admin_mservice_qna_Dto() {}
+
+	public admin_mservice_qna_Dto(int qcate_num, String qcate_name, int q_num,
+			String id, String q_title, String q_content, String q_img,
+			Timestamp q_date) {
+		super();
+		this.qcate_num = qcate_num;
+		this.qcate_name = qcate_name;
+		this.q_num = q_num;
+		this.id = id;
+		this.q_title = q_title;
+		this.q_content = q_content;
+		this.q_img = q_img;
+		this.q_date = q_date;
+	}
+
+	public int getQcate_num() {
+		return qcate_num;
+	}
+
+	public void setQcate_num(int qcate_num) {
+		this.qcate_num = qcate_num;
+	}
+
+	public String getQcate_name() {
+		return qcate_name;
+	}
+
+	public void setQcate_name(String qcate_name) {
+		this.qcate_name = qcate_name;
+	}
+
+	public int getQ_num() {
+		return q_num;
+	}
+
+	public void setQ_num(int q_num) {
+		this.q_num = q_num;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getQ_title() {
+		return q_title;
+	}
+
+	public void setQ_title(String q_title) {
+		this.q_title = q_title;
+	}
+
+	public String getQ_content() {
+		return q_content;
+	}
+
+	public void setQ_content(String q_content) {
+		this.q_content = q_content;
+	}
+
+	public String getQ_img() {
+		return q_img;
+	}
+
+	public void setQ_img(String q_img) {
+		this.q_img = q_img;
+	}
+
+	public Timestamp getQ_date() {
+		return q_date;
+	}
+
+	public void setQ_date(Timestamp q_date) {
+		this.q_date = q_date;
+	}
+	
+}

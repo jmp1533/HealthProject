@@ -1,0 +1,65 @@
+package com.L3_1team.health.dto.client.menu;
+
+import java.sql.Timestamp;
+
+public class Community_border_tip_reple_Dto {
+private int tr_num;
+private int tip_num ;
+private String id;
+private String  tr_content;
+private Timestamp  tr_date;
+
+public Community_border_tip_reple_Dto(){}
+
+public Community_border_tip_reple_Dto(int tr_num, int tip_num, String id,
+		String tr_content, Timestamp tr_date) {
+	super();
+	this.tr_num = tr_num;
+	this.tip_num = tip_num;
+	this.id = id;
+	this.tr_content = tr_content;
+	this.tr_date = tr_date;
+}
+
+public int getTr_num() {
+	return tr_num;
+}
+
+public void setTr_num(int tr_num) {
+	this.tr_num = tr_num;
+}
+
+public int getTip_num() {
+	return tip_num;
+}
+
+public void setTip_num(int tip_num) {
+	this.tip_num = tip_num;
+}
+
+public String getId() {
+	return id;
+}
+
+public void setId(String id) {
+	this.id = id;
+}
+
+public String getTr_content() {
+	return tr_content;
+}
+
+public void setTr_content(String tr_content) {
+	this.tr_content = tr_content;
+}
+
+public Timestamp getTr_date() {
+	return tr_date;
+}
+
+public void setTr_date(Timestamp tr_date) {
+	this.tr_date = tr_date;
+}; 
+
+
+}

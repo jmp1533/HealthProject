@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" 
+"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+
+<definition name=".client.menu.service.policy.view" template="/WEB-INF/views/health/main/layout.jsp">
+ 	<put-attribute name="content" value="/WEB-INF/views/client/menu/service/policy/view.jsp"></put-attribute>
+</definition>
+
+</tiles-definitions>

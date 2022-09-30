@@ -1,0 +1,187 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="/resources/js/jquery-1.10.1.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
+<script src="http://malsup.github.com/jquery.form.js"></script>
+<script type="text/javascript" src="/health/resources/js/jquery-ui-1.10.3.custom.js"></script>
+<script type="text/javascript">
+		function pasteHTML() {
+		    $('#fileform').ajaxForm({
+		        dataType: 'text', 
+		        beforeSerialize: function(){   
+		        },
+		        beforeSubmit : function() {
+		        },
+		        success : function(data) {
+		        	var path="/resources/uploadG/"+data;
+		        	$("#imgimg").attr("src", path);
+		        },
+		        error : function(){
+		        	alert("sss");
+		        }
+		    });
+		}
+		
+		$("#update_image").change(function(){
+				$("#fileform").submit();
+		});
+			
+		
+		$("#file1").change(function(){
+			/*
+			$("#fileform").ajaxForm({
+			    success: function(data){
+			    	alert("sss");
+			 		$("#img").append("<img src=\"/resources/uploadG\"/>");
+			    }
+			 });
+			
+			$.ajax({
+				url: '/healthimg',
+				type: 'POST',
+				data: $("#fileform").serialize(),
+				success:function(data){
+					//var m = $(data).find("m").text();
+					//$("#otpset").val($(data).find("otpset").text());
+					
+					$("#img").append("<img src=\"/resources/uploadG\"/>");				
+				}
+			});
+			*/
+		});
+	
+</script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#b_email3").bind("change", function(){
+		var email = $("#b_email3").val();
+		$("#b_email2").val(email);
+	});
+});
+//
+</script>
+</head>
+<body>
+
+<h2>매장등록</h2>
+<form method="post" action="/client/menu/mypage/traner/Trainer_health_register" name="frm1">
+<table  border="0" cellspacing="1" cellpadding="5">
+		<tr>
+			<td>업체명</td>
+			<td>
+				<input size="30" type="text" name="b_name"/>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>사업자등록번호</td>
+			<td>
+				  <input size="3" type="text" name="b_corporatenum1"/>
+				- <input size="2" type="text" name="b_corporatenum2"/>
+				- <input size="5" type="text" name="b_corporatenum3"/>
+			</td>
+		</tr>
+		
+		<tr>
+			<td align=center bgcolor="#d3d3d3" rowspan="1">주소</td>
+			<td>
+				<input size="10" type="text" name="zipcode1"/>
+				<input size="10" type="button" value="우편번호검색" 
+						onclick="window.open('/client/user/insert/addr/Address','','width=450,height=400, scrollbars=yes')"/><br/>
+				<input size="50" type="text" name="addr1"/><br/>
+				<input size="50" type="text" name="addr2"/>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>전화번호</td>
+			<td>
+				<select name="b_phone1">
+					<option value="010">010</option>
+					<option value="011">011</option>
+					<option value="016">016</option>
+					<option value="017">017</option>
+					<option value="018">018</option>
+					<option value="019">019</option>
+					<option value="02">02</option>
+					<option value="031">031</option>
+					<option value="032">032</option>
+					<option value="033">033</option>
+					<option value="041">041</option>
+					<option value="042">042</option>
+					<option value="043">043</option>
+					<option value="044">044</option>
+					<option value="051">051</option>
+					<option value="052">052</option>	
+					<option value="053">053</option>
+					<option value="054">054</option>
+					<option value="055">055</option>
+					<option value="061">061</option>
+					<option value="062">062</option>	
+					<option value="063">063</option>
+					<option value="064">064</option>
+					<option value="0502">0502</option>
+					<option value="0505">0505</option>
+					<option value="0506">0506</option>
+					<option value="070">070</option>
+				</select>
+				- <input size="5" type="text" name="b_phone2"/>
+				- <input size="5" type="text" name="b_phone3"/>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>이메일</td>
+			<td>
+				<input size="15" type="text" name="b_email1"/>
+				@ <input size="15" type="text" name="b_email2" id="b_email2"/>
+				
+				<select name="b_email3" id="b_email3">
+					<option value="" selected="selected">- 이메일 선택 -</option>
+					<option value="naver.com">naver.com</option>
+					<option value="daum.net">daum.net</option>
+					<option value="nate.com">nate.com</option>
+					<option value="hotmail.com">hotmail.com</option>
+					<option value="yahoo.com">yahoo.com</option>
+					<option value="empas.com">empas.com</option>
+					<option value="korea.com">korea.com</option>
+					<option value="dreamwiz.com">dreamwiz.com</option>
+					<option value="gmail.com">gmail.com</option>
+				</select>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>소개글</td>
+			<td>
+				<textarea rows="20" cols="70" name="b_content"></textarea>
+			</td>
+		</tr>
+	</table>
+	<input type="submit" value="입력"/>
+</form>
+<form id="fileform" name="fileform" action="/seImgInsert" method="post" enctype="multipart/form-data">
+
+	<table>
+		<tr>
+			<td>이미지</td>
+			<td >
+				<img id="imgimg" src="">
+			</td>
+		</tr>
+		<tr>
+			<td>파일</td>
+			<td>
+				 <input type="file" name="update_image" id="update_image" onchange="pasteHTML();" class="fi">
+			</td>
+		</tr>
+	</table>
+</form>
+
+</body>
+</html>

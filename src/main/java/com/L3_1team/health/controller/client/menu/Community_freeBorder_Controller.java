@@ -1,0 +1,229 @@
+package com.L3_1team.health.controller.client.menu;
+
+import java.util.HashMap;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.L3_1team.health.Utility.Page.PageUtil;
+import com.L3_1team.health.dto.category.commend_Dto;
+import com.L3_1team.health.dto.client.menu.Community_border_free_Dto;
+import com.L3_1team.health.dto.client.menu.Community_border_free_reple_Dto;
+
+import com.L3_1team.health.service.client.menu.Community_freeBorder_Service;
+
+@Controller
+public class Community_freeBorder_Controller {
+	@Inject
+	private Community_freeBorder_Service service;
+
+	public Community_freeBorder_Service getService() {
+		return service;
+	}
+
+	public void setService(Community_freeBorder_Service service) {
+		this.service = service;
+	}
+
+	// �����Խ��� ����Ʈ
+	@RequestMapping(value = "/client/menu/insert/comunity/border/free/list", method = RequestMethod.GET)
+	public ModelAndView freeborder_list(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+			@RequestParam(value = "field", required = false) String field,
+			@RequestParam(value = "keyword", required = false) String keyword) {
+		ModelAndView mv = new ModelAndView(".client.menu.comunity.border.free.list");
+		if (field == null && keyword == null) {
+			field = "id";
+			keyword = "";
+		}
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("field", field);
+		map.put("keyword", keyword);
+		int totalRowCount = service.getCount(map);
+
+		PageUtil pu = new PageUtil(pageNum, totalRowCount, 10, 10);
+
+		HashMap<String, String> map1 = new HashMap<String, String>();
+		map1.put("startRow", Integer.toString(pu.getStartRow()));
+		map1.put("endRow", Integer.toString(pu.getEndRow()));
+		map1.put("field", field);
+		map1.put("keyword", keyword);
+
+		List<Community_border_free_Dto> list = service.list(map1);
+
+		mv.addObject("pu", pu);
+		mv.addObject("list", list);
+		mv.addObject("field", field);
+		mv.addObject("keyword", keyword);
+		return mv;
+	}
+
+	// �����Խ��� �۾�����
+	@RequestMapping(value = "/client/menu/insert/comunity/border/free/write", method = RequestMethod.GET)
+	public String freeborder_write() {
+
+		return ".client.menu.comunity.border.free.write";
+
+	}
+
+	// �����Խ��� �۾��� insert
+	@RequestMapping(value = "/client/menu/insert/comunity/border/free/write", method = RequestMethod.POST)
+	public String freeborder_writefrom(@RequestParam(value = "f_content") String content,
+			@RequestParam(value = "f_title") String title, HttpSession session) {
+		String id = (String) session.getAttribute("id");
+
+		Community_border_free_Dto dto = new Community_border_free_Dto(0, id, title, content, null, 0);
+		service.insert(dto);
+
+		return "redirect:/client/menu/insert/comunity/border/free/list";
+	}
+
+	// �����Խ��� �󼼺���
+	@RequestMapping(value = "/client/menu/insert/comunity/border/free/view", method = RequestMethod.GET)
+	public ModelAndView freeborder_view(@RequestParam(value = "free_num") int free_num,
+			@RequestParam(value = "add", defaultValue = "0") int suc) {
+		ModelAndView mv = new ModelAndView(".client.menu.comunity.border.free.view");
+		Community_border_free_Dto dto = service.getinfo(free_num, suc);
+		Community_border_free_Dto prev = service.prev(free_num);
+		Community_border_free_Dto next = service.next(free_num);
+		mv.addObject("dto", dto);
+		mv.addObject("prev", prev);
+		mv.addObject("next", next);
+
+		int totalRowCount = service.getCount_reple(free_num);
+		PageUtil pu = new PageUtil(1, totalRowCount, 10, 10);
+
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		map.put("free_num", free_num);
+		map.put("startRow", pu.getStartRow());
+		map.put("endRow", pu.getEndRow());
+
+		List<Community_border_free_reple_Dto> list = service.reple_list(map);
+		mv.addObject("reple", list);
+		mv.addObject("pu", pu);
+		return mv;
+	}
+
+	// �����Խ��� updatefom
+	@RequestMapping(value = "/client/menu/insert/comunity/border/free/updateform", method = RequestMethod.POST)
+	@ModelAttribute("dto")
+	public ModelAndView freeborder_updatefom(@ModelAttribute("dto") Community_border_free_Dto dto) {
+		ModelAndView mv = new ModelAndView(".client.menu.comunity.border.free.updateform");
+		return mv;
+	}
+
+	// �����Խ��� update
+	@RequestMapping(value = "/client/menu/insert/comunity/border/free/update", method = RequestMethod.POST)
+	public String freeborder_update(Community_border_free_Dto dto) {
+
+		service.update(dto);
+
+		return "redirect:/client/menu/insert/comunity/border/free/view?free_num=" + dto.getFree_num();
+	}
+
+	// ���� ��
+	@RequestMapping(value = "/client/menu/insert/comunity/border/free/Reples", method = RequestMethod.GET)
+	@ResponseBody
+	public String repleview(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+			@RequestParam(value = "free_num", defaultValue = "1") int free_num) {
+		int totalRowCount = service.getCount_reple(free_num);
+		PageUtil pu = new PageUtil(pageNum, totalRowCount, 10, 10);
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		map.put("free_num", free_num);
+		map.put("startRow", pu.getStartRow());
+		map.put("endRow", pu.getEndRow());
+		List<Community_border_free_reple_Dto> list = service.reple_list(map);
+
+		JSONArray ob_list = new JSONArray();
+		JSONObject ob_pu = new JSONObject();
+		for (Community_border_free_reple_Dto vo : list) {
+			JSONObject ob = new JSONObject();
+			ob.put("fr_num", vo.getFr_num());
+			ob.put("id", vo.getId());
+			ob.put("fr_content", vo.getFr_content());
+			ob.put("fr_date", vo.getFr_date().toString());
+			ob_list.add(ob);
+		}
+		return ob_list.toString();
+
+	}
+
+//���� insert
+	@RequestMapping(value = "/client/menu/insert/comunity/border/free/Reple", method = RequestMethod.POST)
+	public String review(@RequestParam(value = "content") String content,
+			@RequestParam(value = "free_num") int free_num,
+			@RequestParam(value = "pageNum", defaultValue = "1") int pageNum, HttpSession session) {
+		String id = (String) session.getAttribute("id");
+		Community_border_free_reple_Dto dto = new Community_border_free_reple_Dto(0, free_num, id, content, null);
+		int suc = service.reple_insert(dto);
+
+		/*
+		 * int totalRowCount=service.getCount_reple(free_num); PageUtil pu=new
+		 * PageUtil(pageNum,totalRowCount,10,10); HashMap<String, Integer> map=new
+		 * HashMap<String, Integer>(); map.put("free_num",free_num);
+		 * map.put("startRow",pu.getStartRow()); map.put("endRow", pu.getEndRow());
+		 * 
+		 * List<Community_border_free_reple_Dto> list2=service.reple_list(map);
+		 * 
+		 * JSONArray ob_list =new JSONArray();
+		 * 
+		 * for(Community_border_free_reple_Dto vo:list2){ JSONObject ob=new
+		 * JSONObject(); ob.put("fr_num",vo.getFr_num()); ob.put("id",vo.getId());
+		 * ob.put("fr_content",vo.getFr_content());
+		 * ob.put("fr_date",vo.getFr_date().toString()); ob_list.add(ob); }
+		 * 
+		 * 
+		 * return ob_list.toString();
+		 */
+
+		return "redirect:/client/menu/insert/comunity/border/free/view?free_num=" + free_num + "&suc=" + suc;
+
+	}
+
+	// ����
+	@RequestMapping(value = "/client/menu/insert/comunity/border/free/delete", method = RequestMethod.GET)
+	public String freeborder_delete(@RequestParam(value = "free_num") int free_num, HttpSession session) {
+		try {
+
+			String id = (String) session.getAttribute("id");
+			HashMap<String, String> map = new HashMap<String, String>();
+			map.put("free_num", Integer.toString(free_num));
+			map.put("id", id);
+
+			service.delete(map);
+			return "redirect:/client/menu/insert/comunity/border/free/list";
+		} catch (Exception e) {
+			return "redirect:/client/menu/insert/comunity/border/free/list";
+		}
+
+	}
+
+	// ��õ insert
+	@RequestMapping(value = "/client/menu/insert/comunity/border/free/commend", method = RequestMethod.GET)
+	@ResponseBody
+	public String commend(@RequestParam(value = "free_num") int free_num, HttpSession session) {
+		String id = (String) session.getAttribute("id");
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("id", id);
+		map.put("free_num", Integer.toString(free_num));
+		commend_Dto dto = service.commend_check(map);
+		if (dto != null) {
+			return "��õ�̹� �ϼ̱���";
+		} else {
+			service.commend_insert(map);
+			return "��õ����!";
+		}
+	}
+
+}

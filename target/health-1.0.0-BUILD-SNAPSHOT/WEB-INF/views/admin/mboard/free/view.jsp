@@ -1,0 +1,185 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+       <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+
+<script type="text/javascript"
+	src="resources/js/jquery-1.10.1.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	
+	$("a#update").click(function(){
+		$("form#update").submit();
+	})
+	
+	
+       // wait for the DOM to be loaded 
+/*  $("input#repleinsert").click(function(){
+      $.ajax({
+    	  url:"/client/menu/insert/comunity/border/free/Reple",
+          type:'POST',	  
+          cache:false,
+          data:$("#replefom").serialize(),
+          dataType:'json',
+          success:function(data){
+       	   
+			   var co="<table border='1' width='600' id='table'><tr>"+
+			   "<th>글번호</th><th>제목</th><th>내용</th><th>작성일</th></tr>";
+	$.each(data,function(i,reple){
+		
+	 	 co+="<tr><td>"+reple.fr_num+"</td><td>"+reple.id+"</td>"+
+      	"<td>"+reple.fr_content+"</td><td>"+reple.fr_date+"</td></tr>"
+		});
+	co+="</table>";
+  $("#replecot").html(co);
+          }
+      })
+	});
+	
+	*/
+	$("a#numer").click(function(){
+		var pagenum=$(this).html();
+		var freenum=${dto.free_num};
+		var path="/admin/mboard/free/Reples?pageNum="+pagenum+"&freenum="+freenum
+		$("a").css("color","white");
+		$(this).css("color","red");
+		$.getJSON(path,function(data){
+	   
+				   var co="<table border='1' width='600' id='table'><tr>"+
+				   "<th>글번호</th><th>제목</th><th>내용</th><th>작성일</th></tr>";
+		$.each(data,function(i,reple){
+			
+		 	 co+="<tr><td>"+reple.fr_num+"</td><td>"+reple.id+"</td>"+
+           	"<td>"+reple.fr_content+"</td><td>"+reple.fr_date+"</td></tr>"
+			});
+		co+="</table>";
+	   $("#replecot").html(co);
+	   
+		});
+	});
+	$("a#next").click(function(){
+	
+		var pagenum=${pu.endPageNum-1}
+		var freenum=${dto.free_num}
+		var path="/admin/mboard/free/Reples?pageNum="+pagenum+"&freenum="+freenum
+		$.getJSON(path,function(data){
+			
+		    var co="<table border='1' width='600' id='table'><tr>"+
+			   "<th>글번호</th><th>제목</th><th>내용</th><th>작성일</th></tr>";
+	     $.each(data,function(i,reple){
+		
+	 	 co+="<tr><td>"+reple.fr_num+"</td><td>"+reple.id+"</td>"+
+    	"<td>"+reple.fr_content+"</td><td>"+reple.fr_date+"</td></tr>"
+		});
+	      co+="</table>";
+         $("#replecot").html(co);
+		});
+	});
+	$("a#before").click(function(){
+		var pagenum=${pu.endPageNum+1}
+		var freenum=${dto.free_num}
+		var path="/admin/mboard/free/Reples?pageNum="+pagenum+"&freenum="+freenum
+		$.getJSON(path,function(data){
+			
+	    var co="<table border='1' width='600' id='table'><tr>"+
+			   "<th>글번호</th><th>제목</th><th>내용</th><th>작성일</th></tr>";
+	     $.each(data,function(i,reple){
+		
+	 	 co+="<tr><td>"+reple.fr_num+"</td><td>"+reple.id+"</td>"+
+       	"<td>"+reple.fr_content+"</td><td>"+reple.fr_date+"</td></tr>"
+		});
+	      co+="</table>";
+        $("#replecot").html(co);
+		});
+	});
+	$("#delete").click(function(){
+		$("#pop").css("display","block")
+		
+	});
+	$("#cancel").click(function(){
+		$("#pop").css("display","none")
+		
+	});
+	$("#dele").click(function(){
+	   	
+	});
+});
+</script>
+
+
+</head>
+<body>
+<form action="/client/menu/insert/comunity/border/free/updateform" id="update" method="post">
+<input type="hidden" name="free_num" value="${dto.free_num}"> 
+<input type="hidden" name="id" value="${dto.id }">  아이디 ${dto.id }<br>
+<input type="hidden" name="f_date" value="${dto.f_date }"> 제목 ${dto.f_date }<br>
+<input type="hidden" name="f_title" value="${dto.f_title }"> 제목 ${dto.f_title }<br>
+<input type="hidden" name="f_hits" value="${dto.f_hits }"> 조회 ${dto.f_hits }<br>
+<input type="hidden" name="count" value="${dto.count }"> 추천 ${dto.count}<br>
+ <div >
+ <input type="hidden" name="f_content" value='${dto.f_content }'>  ${dto.f_content}
+</div>
+</form>
+
+댓글
+<div id="replecontent">
+<div id="replecot">
+<table border="1" width="600" id="table">
+	<tr>
+		<th>글번호</th><th>제목</th><th>내용</th><th>작성일</th>
+	</tr>
+	
+	<c:forEach var="reple" items="${reple }">
+		<tr>
+			<td>${reple.fr_num }</td>
+		<td>${reple.id }</td>
+		<td>${reple.fr_content }</td>
+		<td>${reple.fr_date }</td>
+		</tr>
+	</c:forEach>
+	
+</table>
+</div>
+<div>
+	<c:choose>
+		<c:when test="${pu.startPageNum>10 }">
+			<a  id="before">[이전]</a>
+		</c:when>
+		<c:otherwise>
+			[이전]
+		</c:otherwise>
+	</c:choose>
+	<c:forEach var="i" begin="${pu.startPageNum }" end="${pu.endPageNum }" >
+		<c:choose>
+			<c:when test="${i==pu.pageNum }">
+			<a  id="numer" style="color: red;">
+				${i }
+				</a>
+			</c:when>
+			<c:otherwise>
+				<a id="numer">${i }</a>
+			</c:otherwise>
+		</c:choose>
+	</c:forEach>
+	<c:choose>
+		<c:when test="${pu.endPageNum<pu.totalPageCount }">
+			<a  id="next"> [다음]</a>
+		</c:when>
+		<c:otherwise>
+			[다음]
+		</c:otherwise>
+	</c:choose>
+</div>
+</div>
+
+<br>
+[다음글]<a href="/admin/mboard/free/view?free_num=${next.free_num }">${next.f_title }</a><br/>
+[이전글]<a href="/admin/mboard/free/view?free_num=${prev.free_num }">${prev.f_title }</a><br/>
+<a href="/admin/mboard/free/list">메뉴</a>
+
+</body>
+</html>

@@ -1,0 +1,188 @@
+package com.L3_1team.health.controller.client.menu;
+
+import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import com.L3_1team.health.Utility.Page.PageUtil;
+import com.L3_1team.health.dto.client.menu.Finder_park_parklist_Dto;
+import com.L3_1team.health.service.client.menu.Finder_company_Service;
+
+@Controller
+public class Finder_park_Controller {
+	@Inject Finder_company_Service finder_park_Service;
+	
+	public void setFinder_park_Service(Finder_company_Service finder_park_Service) {
+		this.finder_park_Service = finder_park_Service;
+	}
+	
+	@RequestMapping(value = "/client/menu/finder/park/Parkview", method = RequestMethod.GET)
+	public String parkViewForm(@Param("p_idx")int p_idx, Model model){
+		Finder_park_parklist_Dto parklist_Dto = search(p_idx);
+		model.addAttribute("parklist_Dto", parklist_Dto);
+		
+		return ".client.menu.finder.park.Parkview";
+	}
+	
+	public Finder_park_parklist_Dto search(int p_idx){
+		String surl = "http://openapi.seoul.go.kr:8088/6a6d703135333332303933/" +
+				"xml/SearchParkInfoService/1/1/" + p_idx;
+		try{
+	     URL url = new URL(surl);
+
+	     InputStream is = url.openStream();
+	     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	     DocumentBuilder builder = factory.newDocumentBuilder();
+	     Document document = builder.parse(is);
+	     Element xml = document.getDocumentElement();
+	     
+	     NodeList parklist = xml.getElementsByTagName("P_PARK");
+	     NodeList contentlist = xml.getElementsByTagName("P_LIST_CONTENT");
+	     NodeList addrlist = xml.getElementsByTagName("P_ADDR");
+	     NodeList zonelist = xml.getElementsByTagName("P_ZONE");
+	     NodeList divisionlist = xml.getElementsByTagName("P_DIVISION");
+	     NodeList imglist = xml.getElementsByTagName("P_IMG");
+	     NodeList admintellist = xml.getElementsByTagName("P_ADMINTEL");
+	     NodeList lonlist = xml.getElementsByTagName("LONGITUDE");
+	     NodeList latlist = xml.getElementsByTagName("LATITUDE");
+	     
+	     Node npark = parklist.item(0);
+	     Node ncontent = contentlist.item(0);
+	     Node naddr = addrlist.item(0);
+	     Node nzone = zonelist.item(0);
+	     Node ndivision = divisionlist.item(0);
+	     Node nimg = imglist.item(0);
+	     Node nadmintel = admintellist.item(0);
+	     Node nlon = lonlist.item(0);
+	     Node nlat = latlist.item(0);
+	     
+	     String p_park = npark.getFirstChild().getNodeValue();
+	     String p_list_content = ncontent.getFirstChild().getNodeValue();
+	     String p_addr = naddr.getFirstChild().getNodeValue();
+	     String p_zone = nzone.getFirstChild().getNodeValue();
+	     String p_division = ndivision.getFirstChild().getNodeValue();
+	     String p_img = nimg.getFirstChild().getNodeValue();
+	     String p_admintel = nadmintel.getFirstChild().getNodeValue();
+	     float logitude = Float.parseFloat(nlon.getFirstChild().getNodeValue());
+	     float latitude = Float.parseFloat(nlat.getFirstChild().getNodeValue());
+	     
+	     Finder_park_parklist_Dto parklist_Dto = new Finder_park_parklist_Dto(p_idx, p_park, 
+	    		 p_list_content, p_addr, p_zone, p_division, p_img, p_admintel, logitude, latitude);
+	   
+	     	return parklist_Dto;
+	    }catch(Exception e){
+	    	return null;
+	    }
+	}
+	
+	@RequestMapping(value = "/client/menu/finder/park/ParkList", method = RequestMethod.GET)
+	public String parkListForm(@RequestParam(value="pageNum",defaultValue="1")int pageNum, Model model){
+		int count = tcount();
+		
+		PageUtil page=new PageUtil(pageNum, count, 10,10);
+		
+		List<Finder_park_parklist_Dto> list = parklist(page);
+		
+		model.addAttribute("page", page);
+		model.addAttribute("list", list);
+		
+		return ".client.menu.finder.park.ParkList";
+	}
+	
+	
+	@RequestMapping(value = "/client/menu/finder/park/ParkList", method = RequestMethod.POST)
+	public String parkList(@RequestParam(value="pageNum",defaultValue="1")int pageNum, Model model){
+		int count = tcount();
+		
+		PageUtil page=new PageUtil(pageNum, count, 10,10);
+		
+		List<Finder_park_parklist_Dto> list = parklist(page);
+		
+		model.addAttribute("page", page);
+		model.addAttribute("list", list);
+		
+		return ".client.menu.finder.park.ParkList";
+	}
+
+	
+	public List<Finder_park_parklist_Dto> parklist(PageUtil page) {
+		ArrayList<Finder_park_parklist_Dto> list = new ArrayList<Finder_park_parklist_Dto>();
+		Finder_park_parklist_Dto parklist_Dto = null;
+		String surl = "http://openapi.seoul.go.kr:8088/6a6d703135333332303933/" +
+				"xml/SearchInfoByParkNameService/"+ page.getStartRow() +"/" + page.getEndRow();
+
+		try{
+	     URL url = new URL(surl);
+
+	     InputStream is = url.openStream();
+	     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	     DocumentBuilder builder = factory.newDocumentBuilder();
+	     Document document = builder.parse(is);
+	     Element xml = document.getDocumentElement();
+
+	     NodeList idxlist = xml.getElementsByTagName("P_IDX");
+	     NodeList parklist = xml.getElementsByTagName("P_PARK");
+	     NodeList addrlist = xml.getElementsByTagName("P_ADDR");
+	     NodeList admintellist = xml.getElementsByTagName("P_ADMINTEL");
+
+	     for(int i=0; i<page.getEndPageNum(); i++){
+	    	 System.out.println(idxlist.item(0));
+	    	 if(idxlist.item(i)==null) break;
+	      Node nidx = idxlist.item(i);
+	      Node npark = parklist.item(i);
+	      Node naddr = addrlist.item(i);
+	      Node nadmintel = admintellist.item(i);
+	      String p_idx = nidx.getFirstChild().getNodeValue();
+	      String p_park = npark.getFirstChild().getNodeValue();
+	      String p_addr = naddr.getFirstChild().getNodeValue();
+	      String p_admintel = nadmintel.getFirstChild().getNodeValue();
+	      System.out.println(2);
+	      parklist_Dto = new Finder_park_parklist_Dto(Integer.parseInt(p_idx), p_park, null, 
+	    		  			p_addr, null, null, null, p_admintel, 0, 0);
+	      
+	      list.add(parklist_Dto);
+	     }
+	     	return list;
+	    }catch(Exception e){
+	    	return null;
+	    }
+	}
+	
+	public int tcount(){
+		String surl = "http://openapi.seoul.go.kr:8088/6a6d703135333332303933/" +
+				"xml/SearchParkInfoService/1/1/";
+		try{
+		     URL url = new URL(surl);
+
+		     InputStream is = url.openStream();
+		     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		     DocumentBuilder builder = factory.newDocumentBuilder();
+		     Document document = builder.parse(is);
+		     Element xml = document.getDocumentElement();
+		     
+		     NodeList totalcount = xml.getElementsByTagName("list_total_count");
+		     Node ntotalcount = totalcount.item(0);
+		     int tc = Integer.parseInt(ntotalcount.getFirstChild().getNodeValue());
+		     
+		     return tc;
+		}catch(Exception e){
+	    	return 0;
+	    }
+	}
+}

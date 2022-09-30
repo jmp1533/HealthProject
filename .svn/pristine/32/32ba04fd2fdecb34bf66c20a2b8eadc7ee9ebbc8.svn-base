@@ -1,0 +1,48 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<h3>내트레이너</h3>
+	<table border="1" width="200">
+		<tr>
+			<td align="center"><img src="${dto.t_img }"	width="50px" height="50px" />이미지</td>
+		</tr>
+		<tr>
+			<td>아이디 : ${dto.t_id}</td>
+		</tr>
+		<tr>
+			<td>이름 : ${dto.t_name}</td>
+		</tr>
+		<tr>
+			<td>생년월일 : ${dto.t_birth}</td>
+		</tr>
+		<tr>
+			<td>성별 : ${dto.t_gender}</td>
+		</tr>
+		<tr>
+			<td>이메일 : ${dto.t_email}</td>
+		</tr>
+		<tr>
+			<td>전화 : ${dto.t_phone}</td>
+		</tr>
+		<tr>
+			<td>신장 : ${dto.t_height}cm</td>
+		</tr>
+		<tr>
+			<td>체중 : ${dto.t_weight}kg</td>
+		</tr>
+		<tr>
+			<td>소개글 : ${dto.t_introduction}</td>
+		</tr>
+	</table>
+
+
+<a href="/client/menu/mypage/Mypage">이전페이지로</a>
+</body>
+</html>

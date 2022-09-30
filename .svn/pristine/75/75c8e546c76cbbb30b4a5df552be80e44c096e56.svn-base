@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" 
+"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+
+<definition name=".admin.muser.list.list" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+ 	<put-attribute name="admincontent" value="/WEB-INF/views/admin/muser/list/list.jsp"></put-attribute>
+</definition>
+<definition name=".admin.muser.list.view" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+ 	<put-attribute name="admincontent" value="/WEB-INF/views/admin/muser/list/view.jsp"></put-attribute>
+</definition>
+
+
+<!-- log -->
+<definition name=".admin.muser.record.list" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+ 	<put-attribute name="admincontent" value="/WEB-INF/views/admin/muser/record/list.jsp"></put-attribute>
+</definition>
+
+</tiles-definitions>

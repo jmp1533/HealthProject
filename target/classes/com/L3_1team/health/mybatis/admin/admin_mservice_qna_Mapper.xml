@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.L3_1team.health.mybatis.admin.admin_mservice_qna_Mapper">
+
+	<resultMap type="com.L3_1team.health.dto.admin.admin_mservice_qna_Dto" id="admin_mservice_qna_Dto">
+		<result column="qcate_num" property="qcate_num"/>
+		<result column="qcate_name" property="qcate_name"/>
+		<result column="q_num" property="q_num"/>
+		<result column="id" property="id"/>
+		<result column="q_title" property="q_title"/>
+		<result column="q_content" property="q_content" jdbcType="CLOB" javaType="string"/>
+		<result column="q_img" property="q_img"/>
+		<result column="q_date" property="q_date"/>
+	</resultMap>
+
+	<!-- 관리자 Q&A list-->
+	<select id="list" parameterType="hashmap" resultType="com.L3_1team.health.dto.admin.admin_mservice_qna_Dto">
+		select * from
+		(select aa.*,rownum rnum from(
+		select c.qcate_name, b.q_num, b.id, b.qcate_num, b.q_title, b.q_content, b.q_img, b.q_date
+		from questioncategory c join questionboard b
+		on c.qcate_num=b.qcate_num
+		order by b.q_num desc)aa
+				<if test="field!=null">
+				 	where ${field} like '%' || #{keyword} || '%'
+				</if> 
+		)where <![CDATA[ rnum>=#{startRow} and rnum<=#{endRow}]]>
+	</select>
+
+	<select id="getCount" resultType="int">
+		select NVL(count(*),0) from
+		questionboard
+	</select>
+
+	<!-- 검색 -->
+	<select id="search" resultType="int">
+		select NVL(count(*),0) from questionboard
+		<if test="field!=null">
+			where ${field} like '%' || #{keyword} || '%'
+		</if>
+	</select>
+
+	<!-- 상세보기 -->
+	<select id="getinfo" parameterType="int" resultMap="admin_mservice_qna_Dto">
+		select c.qcate_name, b.q_num, b.id, b.qcate_num, b.q_title, b.q_content, b.q_img, b.q_date
+		from questioncategory c join questionboard b
+		on c.qcate_num=b.qcate_num
+		where b.q_num=#{value}
+	</select>
+
+	<!-- 댓글 쓰기-->
+	<insert id="reple" parameterType="com.L3_1team.health.dto.admin.admin_mservice_qna_reple_Dto">
+		 insert into questionreple
+		 values(questionreple_SEQ.NEXTVAL,#{q_num},#{admin_id},#{qr_content},sysdate)
+	</insert>
+	
+	<!-- 댓글  -->
+	<select id="repleinfo" parameterType="int" resultType="com.L3_1team.health.dto.admin.admin_mservice_qna_reple_Dto">
+		select *
+		from questionreple
+		where q_num=#{q_num}
+	</select>
+	
+</mapper>

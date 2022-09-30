@@ -1,0 +1,223 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@taglib prefix="tiles"  uri="http://tiles.apache.org/tags-tiles"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>    
+<style type="text/css">
+.main{
+	min-height: 800px;
+}
+.menu{
+	width: 100%;
+	height: 360px;
+}
+.inner_Box{
+	width: 100%;
+	height: 440px;
+}
+.box_1{
+	width: 800px;
+	height: 220px;
+	float: left;
+}
+.box_1 div{
+	width: 380px;
+	height: 200px;
+	float: left;
+}
+.box_2{
+	width: 400px;
+	height: 440px;
+	float: right;
+}
+.box_2 div{
+	width: 380px;
+	height: 420px;
+}
+.box_3{
+	width: 800px;
+	height: 220px;
+	float:left;
+}
+.box_3 div{
+	width: 380px;
+	height: 200px;
+	float: left;
+}
+.spone_bar{
+	width: 30%;
+	height: 100%;
+	float: left;
+}
+.spone_list{
+	width: 100%;
+	height: 25%;
+}
+.spone_list:HOVER{
+	cursor: pointer;
+}
+
+.slide{
+	width: 70%;
+	height: 100%;
+	float:right;
+	
+}
+
+#img_slide_main{
+	position: relative;
+}
+#img_slide_vUl li{
+	position: absolute;
+	display: none;
+}
+#img_slide_vUl li#img_slide_vLi_1{
+	display: block;
+}
+
+</style>
+<script type="text/javascript">
+$(document).ready(function(){
+	console.log('lll');
+	var img_slide_vUl=$('#img_slide_vUl'),
+	img_slide_vLi=$('li',img_slide_vUl),
+	img_slide_pause=false,
+	img_slide_main=$('#img_slide_main'),
+	img_slide_cnt=1,
+	img_slide_fade_time=1000;
+	
+	function img_slide_stop_roll(){
+		
+	}img_slide_main.hover(function(){
+		img_slide_pause=true;
+	},function(){
+		img_slide_pause=false;
+	});
+	$('.spone_list').click(function(){
+		var list_num=$(this).attr('id').split('_');
+		img_slide_auto_roll(list_num[1]);
+	});
+	function img_slide_auto_roll(goNum){
+		if(goNum){
+			img_slide_vLi.fadeOut(0);
+			img_slide_cnt=goNum;
+			$('#img_slide_vLi_'+goNum).fadeIn(0);
+		}else{
+			img_slide_vLi.fadeOut(img_slide_fade_time);
+			img_slide_cnt++;
+			if(img_slide_cnt==4)img_slide_cnt=1;
+			$('#img_slide_vLi_'+img_slide_cnt).fadeIn(img_slide_fade_time);
+		};
+	}
+	
+	 var num = document.getElementById("num").value;
+		if(num == 1){
+			window.open('/client/popup/info/Userinfo','','width=450,height=400, scrollbars=yes');
+		}
+	
+	setInterval(function(){
+		if(!img_slide_pause)img_slide_auto_roll()
+	},2500);
+});
+</script>
+
+<c:if test="${not empty sessionScope.ulogid}">
+	<input type="hidden" value="${sessionScope.n}" id="num">
+</c:if>
+<div >
+<div class="menu">
+		<div class="spone_bar">
+			<div class="spone_list" id="list_1">
+				다이어리 링크
+			</div>
+			<div class="spone_list" id="list_2">
+				동영상 링크
+			</div>
+			<div class="spone_list" id="list_3">
+				트레이너 목록 링크
+			</div>
+			<div class="spone_list" id="list_4">
+				헬스장 목록 링크
+			</div>
+		</div>
+	<article class="slide" style="padding: 0;">
+		<div id="img_slide_main" >
+			<ul id="img_slide_vUl">
+				<li id="img_slide_vLi_1"><a href="/client/menu/diary/date"><img src="/resources/images/main_dairy.png" width="840px" height="360px" alt='a1'/></a></li>
+				<li id="img_slide_vLi_2"><a href="/client/menu/information/movie/health_movie_list"><img src="/resources/images/main_movie_1.png" width="840px" height="360px" alt='a2'/></a></li>
+				<li id="img_slide_vLi_3"><a href="/client/menu/people/traner/list"><img src="/resources/images/main_trainer.png" width="840px" height="360px" alt='a3'/></a></li>
+			</ul>
+		</div>
+	</article>
+</div>
+<div class="inner_Box">
+	<div class="box_1">
+		<div style="padding: 5px; margin:5px;">
+			공지사항<a href="/client/menu/service/notice/Noticelist"><img src="/resources/images/list_icon.png" style="float: right;" /></a>
+			<div style=" width:380px; height:180px; border-top-width: 1px; border-top-style: dotted; padding-top: 10px;overflow:hidden;">
+				<c:forEach var="notice1" items="${notice}" begin="0" end="5">
+						
+							<a href="/client/menu/people/user/view?p_num=${notice1.noti_num}" style="width: auto; height: auto;">${notice1.noti_title}</a>
+					  <hr style="margin-bottom: 5px;  margin-top: 3px;">
+				</c:forEach>
+			</div>
+			
+		</div>
+		<div style="padding: 5px; margin:5px;">
+			피플<a href="/client/menu/people/user/list"><img src="/resources/images/list_icon.png" style="float: right;" /></a>
+			<div style=" width:380px; height:180px; border-top-width: 1px; border-top-style: dotted; padding-top: 10px;overflow:hidden;">
+				
+					<c:forEach var="people1" items="${people}" begin="0" end="5">
+						
+							<a href="/client/menu/people/user/view?p_num=${people1.p_num}" style="width: auto; height: auto;">${people1.p_title}</a>
+							<span style="float:right;">${people1.id }</span>
+					  <hr style="margin-bottom: 5px;  margin-top: 3px;">
+					</c:forEach>
+			
+			</div>
+		</div>
+	</div>
+	
+	<div class="box_2" >
+	<div style="padding: 5px; margin:5px;">
+		건강정보<a href="/client/menu/information/news/healthsNews"><img src="/resources/images/list_icon.png" style="float: right;" /></a>
+		<div style="width:380px; height:400px; border-top-width: 1px; border-top-style: dotted;padding-top: 10px;overflow:hidden;	">
+			
+				<c:forEach var="nav" items="${news}" begin="0" end="5">
+			
+						<a href="${nav.link }" style="width: auto; height: auto;" target="_blank">${nav.title.toString().substring(0,20)}......</a>
+			  <hr style="margin-bottom: 5px;  margin-top: 3px;">
+				</c:forEach>
+
+		</div>
+	</div>
+	</div>
+	<div class="box_3">
+		<div style="padding: 5px; margin:5px;">
+			팁&노하우 게시판<a href="/client/menu/insert/comunity/border/tip/list"><img src="/resources/images/list_icon.png" style="float: right;" /></a>
+			<div style="width:380px; height:180px; border-top-width: 1px; border-top-style: dotted;padding-top: 10px;overflow:hidden; ">
+				<c:forEach var="tip1" items="${tip}" begin="0" end="5">
+				
+						<a href="/client/menu/insert/comunity/border/tip/view?tip_num=${tip1.tip_num}" style="width: auto; height: auto;">${tip1.tip_title}</a>
+						<span style="width: 50px; float:right;">${tip1.id}</span>
+					
+						  <hr style="margin-bottom: 5px;  margin-top: 3px;">
+				</c:forEach>
+			</div>
+		</div>
+		<div style="padding: 5px; margin:5px;" >
+			자유게시판<a href="/client/menu/insert/comunity/border/free/list"><img src="/resources/images/list_icon.png" style="float: right;" /></a>
+			<div style="width:380px; height:180px; border-top-width: 1px; border-top-style: dotted; padding-top: 10px;overflow:hidden; ">
+			
+					<c:forEach var="free1" items="${free}" begin="0" end="5">
+
+							<a href="/client/menu/insert/comunity/border/free/view?free_num=${free1.free_num}" style="width: auto; height: auto;">${free1.f_title}</a>
+							<span style="width: auto; height: auto; font-size: 6pt;">(${free1.count})</span>
+							<span style="width: 50px; float:right;">${free1.id }</span>
+						 <hr style="margin-bottom: 5px;  margin-top: 3px;">
+					</c:forEach>
+			
+			</div>
+		</div>
+	</div>
+</div>
+</div>

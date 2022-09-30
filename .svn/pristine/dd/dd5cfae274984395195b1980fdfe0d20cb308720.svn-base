@@ -1,0 +1,165 @@
+package com.L3_1team.health.controller.client.user;
+
+import java.util.HashMap;
+import java.util.Random;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.L3_1team.health.Utility.Page.OtpMailSender;
+import com.L3_1team.health.dto.client.user.AccountFinderDto;
+import com.L3_1team.health.dto.client.user.UserDto;
+import com.L3_1team.health.service.client.user.AccountFinderService;
+
+@Controller
+public class AccountFinderController {
+	@Inject	private AccountFinderService accountFinderService;
+	@Inject private OtpMailSender sender;
+	
+	public void setAccountFinderService(AccountFinderService accountFinderService) {
+		this.accountFinderService = accountFinderService;
+	}
+
+	public void setSender(OtpMailSender sender) {
+		this.sender = sender;
+	}
+	
+	@RequestMapping(value="/client/user/finder/search/searchmain",method=RequestMethod.GET)
+	public String searchMain(){
+		return ".client.user.finder.searchmain";
+	}
+	
+	@RequestMapping(value="/client/user/finder/search/idSearch",method=RequestMethod.POST)
+	public String user_idSearch(@RequestParam("search_1")String search_1,
+			@RequestParam("search_2")String search_2,
+			Model model){
+		AccountFinderDto afdto=new AccountFinderDto(search_1, search_2);
+		HashMap<String, String> map=new HashMap<String, String>();
+		map.put("search_1", afdto.getSearch_1());
+		map.put("search_2", afdto.getSearch_2());
+		String u_id=accountFinderService.getUserId(map);
+		model.addAttribute("u_id",u_id);
+		
+		return ".client.user.finder.idSearch";
+	}
+	
+	@RequestMapping(value="/client/user/finder/search/pwdSearch",method=RequestMethod.POST)
+	public String user_pwdSearch(@RequestParam("search_1")String search_1,
+			@RequestParam("search_2")String search_2,
+			Model model){
+		AccountFinderDto afdto=new AccountFinderDto(search_1, search_2);
+		HashMap<String, String> map=new HashMap<String, String>();
+		
+		map.put("search_1", afdto.getSearch_1());
+		map.put("search_2", afdto.getSearch_2());
+		UserDto dto=accountFinderService.getUserInfo(map);
+		
+		model.addAttribute("dto",dto);
+		
+		return ".client.user.finder.pwdSearch";
+	}
+	
+	@RequestMapping(value="/client/user/finder/search/hintCompare",method=RequestMethod.POST)
+	public String user_hint_compare(@RequestParam("u_id")String u_id,
+			@RequestParam("u_email")String u_email,
+			@RequestParam("u_question")int choice_question,
+			@RequestParam("choice_answer")String choice_answer,
+			Model model){
+		HashMap<String, String> map=new HashMap<String, String>();
+		map.put("search_1",	u_id);
+		map.put("search_2", u_email);
+		UserDto dto=accountFinderService.getUserInfo(map);
+		
+		if(dto.getU_answer().equals(choice_answer) && dto.getU_question()==choice_question){
+			model.addAttribute("dto",dto);
+			return ".client.user.finder.search.otpcheck";
+		}else{
+			return ".client.user.finder.pwdSearch";
+		}
+	}
+	
+	@RequestMapping(value="/client/user/finder/search/otpcheck",method=RequestMethod.POST)
+	public String otpcheck(@RequestParam("uid")String u_id,
+			@RequestParam("toEmail")String u_email,
+			@RequestParam("otpset")String otpset,
+			@RequestParam("otpcheck")String otpcheck,
+			Model model){
+		
+		HashMap<String, String> map=new HashMap<String, String>();
+		map.put("search_1",	u_id);
+		map.put("search_2", u_email);
+		UserDto dto=accountFinderService.getUserInfo(map);
+		
+		if(otpset.equals(otpcheck)){
+			model.addAttribute("dto",dto);
+			return ".client.user.finder.changePwd";
+		}else{
+			model.addAttribute("dto",dto);
+			return ".client.user.finder.search.otpcheck";
+		}
+	}
+	@RequestMapping(value="/client/user/finder/search/otpcheck",method=RequestMethod.GET)
+	public String otpcheckfrom(@RequestParam("u_id")String u_id, 
+									@RequestParam("u_email")String u_email, Model model){
+		HashMap<String, String> map=new HashMap<String, String>();
+		map.put("search_1",	u_id);
+		map.put("search_2", u_email);
+		
+		UserDto dto=accountFinderService.getUserInfo(map);
+		
+		model.addAttribute("dto", dto);
+		return ".client.user.finder.changePwd";
+	}	
+	 
+	@RequestMapping(value="/client/user/finder/search/changePwd",method=RequestMethod.POST)
+	public String user_change_pwd(@RequestParam("u_id")String u_id,
+			@RequestParam("u_email")String u_email,
+			@RequestParam("changePwd")String changePwd,
+			@RequestParam("changePwd2")String changePwd2,
+			Model model){
+		
+		if(changePwd.equals(changePwd2)){
+			HashMap<String, String> map=new HashMap<String, String>();
+			map.put("search_id", u_id);
+			map.put("set_pwd", changePwd);
+			UserDto dto=accountFinderService.userChangePwd(map);
+			model.addAttribute("dto",dto);
+			return ".client.user.finder.changeOk";
+		}else{
+			model.addAttribute("u_id", u_id);
+			model.addAttribute("u_email", u_email);
+			return "redirect:/client/user/finder/search/otpcheck";
+		}
+	}
+	
+	@RequestMapping(value = "/authentication", method = RequestMethod.GET)
+	@ResponseBody
+	public String sendMail(String msg, String toEmail, HttpServletRequest request){
+		Random rnd=new Random();
+		String otpset = String.valueOf(rnd.nextInt(9999)+1000);
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+		sb.append("<mail>");
+		
+		String title = "인증번호 발송!";
+		String fromEmail = "admin@gmail.com";
+		toEmail = "jmp1533@naver.com";
+		msg = otpset;
+		boolean m = sender.sendMail(title, msg, fromEmail, toEmail);
+		
+		sb.append("<m>" + m + "</m>");	
+		sb.append("<otpset>" + otpset + "</otpset>");
+		sb.append("</mail>");
+		return sb.toString();
+	}
+	
+	
+}

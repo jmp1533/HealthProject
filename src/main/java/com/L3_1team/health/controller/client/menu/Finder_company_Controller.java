@@ -1,0 +1,99 @@
+package com.L3_1team.health.controller.client.menu;
+
+import java.util.HashMap;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.L3_1team.health.Utility.Page.PageUtil;
+import com.L3_1team.health.dto.client.menu.Finder_company_Dto;
+import com.L3_1team.health.service.client.menu.Finder_company_Service;
+
+@Controller
+public class Finder_company_Controller {
+	@Inject
+	Finder_company_Service company_Service;
+
+	public void setCompany_Service(Finder_company_Service company_Service) {
+		this.company_Service = company_Service;
+	}
+
+	@RequestMapping(value = "/client/menu/finder/company/CompanyList", method = RequestMethod.GET)
+	public String companyForm(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+			@RequestParam(value = "b_name", defaultValue = "") String b_name, Model model) {
+
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		PageUtil page = null;
+		List<Finder_company_Dto> list = null;		
+		int count = 0;
+		
+		map.put("b_name", b_name);
+
+		count = company_Service.getCount(map);
+		page = new PageUtil(pageNum, count, 10, 10);
+
+		map.put("startRow", page.getStartRow());
+		map.put("endRow", page.getEndRow());
+
+		list = company_Service.getlist(map);
+
+		model.addAttribute("list", list);
+		model.addAttribute("page", page);
+		model.addAttribute("b_name", b_name);
+
+		return ".client.menu.finder.company.CompanyList";
+	}
+
+	@RequestMapping(value = "/client/menu/finder/company/CompanyList", method = RequestMethod.POST)
+	public String companyList(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+			@RequestParam(value = "b_name", defaultValue = "") String b_name, Model model) {
+
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		PageUtil page = null;
+		List<Finder_company_Dto> list = null;
+		int count = 0;
+		
+		map.put("b_name", b_name);
+
+		count = company_Service.getCount(map);
+		page = new PageUtil(pageNum, count, 10, 10);
+
+		map.put("startRow", page.getStartRow());
+		map.put("endRow", page.getEndRow());
+
+		list = company_Service.getlist(map);
+
+		model.addAttribute("list", list);
+		model.addAttribute("page", page);
+		model.addAttribute("b_name", b_name);
+
+		return ".client.menu.finder.company.CompanyList";
+	}
+
+	@RequestMapping(value = "/client/menu/finder/company/Companyview", method = RequestMethod.GET)
+	public String parkViewForm(@Param("b_num") int b_num, Model model) {
+
+		Finder_company_Dto company_Dto = company_Service.search(b_num);
+		List<String> imglist = company_Service.img(b_num);
+		String[] img = new String[8];
+
+		for (int i = 0; i < 8; i++) {
+			if (imglist.size() > i) {
+				img[i] = imglist.get(i);
+			} else {
+				img[i] = null;
+			}
+		}
+
+		model.addAttribute("company_Dto", company_Dto);
+		model.addAttribute("img", img);
+		return ".client.menu.finder.company.Companyview";
+	}
+}

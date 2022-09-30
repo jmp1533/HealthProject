@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.L3_1team.health.mybatis.user.insert_trainer">
+
+	<insert id="insert" parameterType="com.L3_1team.health.dto.client.user.TrainerDto">
+		 insert into trainers
+		 values(#{t_id}, #{t_pwd}, #{t_name}, #{zipcode}, #{t_addr}, #{t_company},
+		 		#{t_phone}, #{t_birth}, #{t_email}, #{t_img}, #{t_question}, #{t_answer},
+		        #{t_gender}, #{t_weight}, #{t_height}, #{t_introduction}, sysdate, #{t_condition}, 1)
+	</insert>
+
+	<select id="login" parameterType="hashmap" resultType="String">
+		select t_id from trainers 
+		where t_id=#{id} and t_pwd=#{password} and t_condition=1 and t_out=1
+	</select>
+	
+	<insert id="log" parameterType="String">
+		insert into trainerslog
+		values(trainerslog_SEQ.nextval, #{t_id}, sysdate)
+	</insert>
+</mapper>

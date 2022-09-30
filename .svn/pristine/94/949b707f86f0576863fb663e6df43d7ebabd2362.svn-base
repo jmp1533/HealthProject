@@ -1,0 +1,112 @@
+package com.L3_1team.health.controller.admin;
+
+import java.util.HashMap;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.L3_1team.health.Utility.Page.PageUtil;
+import com.L3_1team.health.dto.client.menu.Service_faq_Dto;
+import com.L3_1team.health.service.admin.admin_service_faq_Service;
+
+@Controller
+public class admin_service_faq_Controller {
+	@Inject private admin_service_faq_Service service;
+	
+	public void setService(admin_service_faq_Service service) {
+		this.service = service;
+	}
+	
+	//faq목록(페이징)
+	@RequestMapping(value="/admin/mservice/faq/list", method=RequestMethod.GET)
+	public ModelAndView list(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+			@RequestParam(value="field",required=false)String field,
+			@RequestParam(value="keyword",required=false)String keyword){
+		
+		ModelAndView mv = new ModelAndView(".admin.mservice.faq.list");
+		if (field==null && keyword==null) {
+			field="faq_cate";
+			keyword="";
+		}
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("field", field);
+		map.put("keyword", keyword);
+		int totalRowCount = service.search(map);
+		
+		PageUtil pu = new PageUtil(pageNum, totalRowCount, 10, 10);
+		List<Service_faq_Dto> listall = service.listall();
+		
+		map.put("startRow", pu.getStartRow());
+		map.put("endRow", pu.getEndRow());
+		List<Service_faq_Dto> list = service.list(map);
+		mv.addObject("list", list);
+		mv.addObject("pu", pu);
+		mv.addObject("field", field);
+		mv.addObject("keyword", keyword);
+		return mv;
+	}
+	
+	//공지사항 상세보기
+	@RequestMapping(value="/admin/mservice/faq/view",method=RequestMethod.GET)
+	public String getinfo(@RequestParam("faq_num")int faq_num, Model model){
+		Service_faq_Dto dto=service.getinfo(faq_num);
+		Service_faq_Dto prev=service.prev(faq_num);
+		Service_faq_Dto next=service.next(faq_num);
+			
+		model.addAttribute("dto", dto);
+		model.addAttribute("prev", prev);
+		model.addAttribute("next", next);
+		return ".admin.mservice.faq.view";
+	}
+	
+	//글쓰기 Form
+	@RequestMapping(value="/admin/mservice/faq/write",method=RequestMethod.GET)
+	public String insertForm(){
+		return ".admin.mservice.faq.write";
+	}
+	
+	//글쓰기
+	@RequestMapping(value="/admin/mservice/faq/writer",method=RequestMethod.POST)
+	public String insert(@RequestParam("faq_question")String faq_question, @RequestParam("faq_answer")String faq_answer,Service_faq_Dto dto) {
+		service.insert(dto);
+		return "redirect:/admin/mservice/faq/list";
+	}
+	
+	//수정 Form
+	@RequestMapping(value="/admin/mservice/faq/update",method=RequestMethod.GET)
+	public String updateForm(@ModelAttribute("faq_num") int faq_num, Model model){
+		Service_faq_Dto dto=service.getinfo(faq_num);
+		model.addAttribute("dto", dto);
+		return ".admin.mservice.faq.update";
+	}
+	
+	//수정
+	@RequestMapping(value="/admin/mservice/faq/update",method=RequestMethod.POST)
+	public String update(@ModelAttribute("dto")Service_faq_Dto dto){
+		service.update(dto);
+		return "redirect:/admin/mservice/faq/list";
+	}
+	
+	//삭제
+	@RequestMapping(value = "/admin/mservice/faq/delete", method = RequestMethod.POST)
+	public String delete(HttpServletRequest request){
+		String delck[] = request.getParameterValues("delck");
+		
+		for(int i=0; i<delck.length; i++){
+			int faq_num = Integer.parseInt(delck[i].toString());
+			
+			service.delete(faq_num);
+		}
+		return "redirect:/admin/mservice/faq/list";
+	}
+}

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" 
+"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+	<definition name=".client.menu.comunity.border.Review.list" template="/WEB-INF/views/health/main/layout.jsp">
+		<put-attribute name="content" value="/WEB-INF/views/client/menu/comunity/border/Review/list.jsp"></put-attribute>
+	</definition>
+	<definition name=".client.menu.comunity.border.Review.view" template="/WEB-INF/views/health/main/layout.jsp">
+		<put-attribute name="content" value="/WEB-INF/views/client/menu/comunity/border/Review/view.jsp"></put-attribute>
+	</definition>
+	<definition name=".client.menu.comunity.border.Review.write" template="/WEB-INF/views/health/main/layout.jsp">
+		<put-attribute name="content" value="/WEB-INF/views/client/menu/comunity/border/Review/writes.jsp"></put-attribute>
+	</definition>
+	<definition name=".client.menu.comunity.border.Review.updateform" template="/WEB-INF/views/health/main/layout.jsp">
+	 	<put-attribute name="content" value="/WEB-INF/views/client/menu/comunity/border/Review/update.jsp"></put-attribute>
+	</definition>
+</tiles-definitions>

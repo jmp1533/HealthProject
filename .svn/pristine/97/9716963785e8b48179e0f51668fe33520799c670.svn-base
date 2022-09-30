@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" 
+"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+
+<definition name=".client.menu.diary.date" template="/WEB-INF/views/health/main/layout.jsp">
+ <put-attribute name="content" value="/WEB-INF/views/client/menu/diary/date.jsp"></put-attribute>
+</definition>
+<definition name=".client.menu.diary.view" template="/WEB-INF/views/health/main/layout.jsp">
+ <put-attribute name="content" value="/WEB-INF/views/client/menu/diary/view.jsp"></put-attribute>
+</definition>
+<definition name=".client.menu.diary.writerform" template="/WEB-INF/views/health/main/layout.jsp">
+ <put-attribute name="content" value="/WEB-INF/views/client/menu/diary/writer.jsp"></put-attribute>
+</definition>
+<definition name=".client.menu.diary.updateform" template="/WEB-INF/views/health/main/layout.jsp">
+ <put-attribute name="content" value="/WEB-INF/views/client/menu/diary/update.jsp"></put-attribute>
+</definition>
+
+
+
+
+
+
+<definition name=".client.menu.diary.chart.chart" template="/WEB-INF/views/health/main/layout.jsp">
+ <put-attribute name="content" value="/WEB-INF/views/client/menu/diary/chart/chart.jsp"></put-attribute>
+</definition>
+<definition name=".client.menu.diary.chart.chart_year" template="/WEB-INF/views/health/main/layout.jsp">
+ <put-attribute name="content" value="/WEB-INF/views/client/menu/diary/chart/chart_year.jsp"></put-attribute>
+</definition>
+<definition name=".client.menu.diary.chart.traner_member" template="/WEB-INF/views/health/main/layout.jsp">
+ <put-attribute name="content" value="/WEB-INF/views/client/menu/diary/chart/traner_member.jsp"></put-attribute>
+</definition>
+
+
+
+
+<definition name=".client.menu.diary.foodpopup" template="/WEB-INF/views/client/popup/food/food.jsp">
+</definition>
+
+</tiles-definitions>
+

@@ -1,0 +1,103 @@
+package com.L3_1team.health.dto.client.menu;
+
+public class Diary_diarymenu_Dto {
+	private int dm_num;
+	private int d_num;
+	private String dm_time;
+	private String dm_img;
+	private int calorie;
+	private int fat;
+	private int cardohydrate;
+	private int cholesterol;
+	private int protein;
+
+	public Diary_diarymenu_Dto() {
+	}
+
+	public Diary_diarymenu_Dto(int dm_num, int d_num, String dm_time, String dm_img, int calorie, int fat,
+			int cardohydrate, int cholesterol, int protein) {
+		super();
+		this.dm_num = dm_num;
+		this.d_num = d_num;
+		this.dm_time = dm_time;
+		this.dm_img = dm_img;
+		this.calorie = calorie;
+		this.fat = fat;
+		this.cardohydrate = cardohydrate;
+		this.cholesterol = cholesterol;
+		this.protein = protein;
+	}
+
+	public int getDm_num() {
+		return dm_num;
+	}
+
+	public void setDm_num(int dm_num) {
+		this.dm_num = dm_num;
+	}
+
+	public int getD_num() {
+		return d_num;
+	}
+
+	public void setD_num(int d_num) {
+		this.d_num = d_num;
+	}
+
+	public String getDm_time() {
+		return dm_time;
+	}
+
+	public void setDm_time(String dm_time) {
+		this.dm_time = dm_time;
+	}
+
+	public String getDm_img() {
+		return dm_img;
+	}
+
+	public void setDm_img(String dm_img) {
+		this.dm_img = dm_img;
+	}
+
+	public int getCalorie() {
+		return calorie;
+	}
+
+	public void setCalorie(int calorie) {
+		this.calorie = calorie;
+	}
+
+	public int getFat() {
+		return fat;
+	}
+
+	public void setFat(int fat) {
+		this.fat = fat;
+	}
+
+	public int getCardohydrate() {
+		return cardohydrate;
+	}
+
+	public void setCardohydrate(int cardohydrate) {
+		this.cardohydrate = cardohydrate;
+	}
+
+	public int getCholesterol() {
+		return cholesterol;
+	}
+
+	public void setCholesterol(int cholesterol) {
+		this.cholesterol = cholesterol;
+	}
+
+	public int getProtein() {
+		return protein;
+	}
+
+	public void setProtein(int protein) {
+		this.protein = protein;
+	}
+
+}

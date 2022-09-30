@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" 
+"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+	<definition name=".client.user.finder.searchmain" template="/WEB-INF/views/client/user/finder/searchlayout.jsp">
+		<put-attribute name="search_content" value="/WEB-INF/views/client/user/finder/searchmain.jsp"></put-attribute>
+	</definition>
+	
+	<definition name=".client.user.finder.idSearch" template="/WEB-INF/views/client/user/finder/searchlayout.jsp">
+		<put-attribute name="search_content" value="/WEB-INF/views/client/user/finder/searchid.jsp"></put-attribute>
+	</definition>
+	<definition name=".client.user.finder.pwdSearch" template="/WEB-INF/views/client/user/finder/searchlayout.jsp">
+		<put-attribute name="search_content" value="/WEB-INF/views/client/user/finder/searchpwd.jsp"></put-attribute>
+	</definition>
+	<definition name=".client.user.finder.compareAnswer" template="/WEB-INF/views/client/user/finder/searchlayout.jsp">
+		<put-attribute name="search_content" value="/WEB-INF/views/client/user/finder/compareAnswer.jsp"></put-attribute>
+	</definition>
+	<definition name=".client.user.finder.changePwd" template="/WEB-INF/views/client/user/finder/searchlayout.jsp">
+		<put-attribute name="search_content" value="/WEB-INF/views/client/user/finder/changePwd.jsp"></put-attribute>
+	</definition>
+	<definition name=".client.user.finder.changeOk" template="/WEB-INF/views/client/user/finder/searchlayout.jsp">
+		<put-attribute name="search_content" value="/WEB-INF/views/client/user/finder/changeOk.jsp"></put-attribute>
+	</definition>
+	
+	<definition name=".client.user.finder.search.otpcheck" template="/WEB-INF/views/client/user/finder/searchlayout.jsp">
+		<put-attribute name="search_content" value="/WEB-INF/views/client/user/finder/motpcheck.jsp"></put-attribute>
+	</definition>
+	
+</tiles-definitions>

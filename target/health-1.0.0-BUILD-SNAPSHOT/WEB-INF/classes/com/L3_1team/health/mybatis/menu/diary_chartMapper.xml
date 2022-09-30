@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.L3_1team.health.mybatis.menu.diary_chartMapper">
+
+	<select id="chart_list" parameterType="hashmap" resultType="com.L3_1team.health.dto.client.menu.Diary_chart_Dto">
+	select * from userinfo 
+	where u_id=#{id} and to_char(ui_date ,'yyyymmdd') between #{startday2} and #{endday2}  
+	order by ui_date 
+	</select>  
+	  <select id="wight" parameterType="string" resultType="int">
+	  select u_targetweight from users where u_id=#{value}
+	  
+	  </select>
+	  
+	 <select id="food_chart" parameterType="hashmap" resultType="com.L3_1team.health.dto.client.menu.Diary_diarymenu_Dto">	 
+select NVL(avg(calorie),0) calorie,NVL(avg(fat),0) fat,NVL(avg(cardohydrate),0) cardohydrate ,
+  NVL(avg(cholesterol),0) cholesterol , NVL(avg(protein),0) protein  from 
+(select * from diarymenu m,diary d where m.d_num=d.d_num and d.id=#{id} and
+ to_char(d.d_date,'yyyymmdd') between #{startday2} and #{endday2}) 	 
+	</select> 
+	  
+	  
+</mapper>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.L3_1team.health.mybatis.popup.popup_msgMapper">
+
+	<resultMap type="com.L3_1team.health.dto.client.popup.popup_msg_Dto" id="msg_Dto">
+		<result column="msg_num" property="msg_num"/>
+		<result column="msg_send_id" property="msg_send_id"/>
+		<result column="msg_receive_id" property="msg_receive_id"/>
+		<result column="msg_title" property="msg_title"/>
+		<result column="msg_content" property="msg_content" jdbcType="CLOB" javaType="string"/>
+		<result column="msg_date" property="msg_date"/>
+		<result column="msg_condition" property="msg_condition"/>
+	</resultMap>
+	
+	<insert id="insert" parameterType="com.L3_1team.health.dto.client.popup.popup_msg_Dto">
+		insert into msg values(msg_seq.nextval, #{msg_send_id}, #{msg_receive_id}, 
+		#{msg_title}, #{msg_content}, sysdate, 1)
+	</insert>
+	
+	<update id="update" parameterType="int">
+		update msg set msg_condition=2 where msg_num=#{value}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete from msg where msg_num=#{value}
+	</delete>
+	
+	<select id="list" parameterType="hashmap" resultType="com.L3_1team.health.dto.client.popup.popup_msg_Dto">
+		select * from
+			(select aa.*, rownum rnum from
+				(select * from msg  where msg_receive_id=#{id} order by msg_num desc)aa
+			)
+		where <![CDATA[rnum>=#{startRow} and rnum<=#{endRow}]]>
+	</select>
+	
+	<select id="search" parameterType="int" resultMap="msg_Dto">
+		select * from msg where msg_num=#{value}
+	</select>
+	
+	<select id="prev" parameterType="hashmap" resultMap="msg_Dto">
+		select * from(
+			select * from msg 
+				<![CDATA[ where msg_num<#{msg_num} and msg_receive_id=#{id} ]]>
+			 order by msg_num desc 
+		) where rownum=1
+	</select>
+	
+	<select id="next" parameterType="hashmap" resultMap="msg_Dto">
+		select * from(
+			select * from msg
+				<![CDATA[ where msg_num>#{msg_num} and msg_receive_id=#{id} ]]>
+			 order by msg_num asc 
+		) where rownum=1
+	</select>
+	
+	<select id="getCount" parameterType="hashmap" resultType="int">
+		select NVL(count(*),0) from msg where msg_receive_id=#{id}
+	</select>
+</mapper>

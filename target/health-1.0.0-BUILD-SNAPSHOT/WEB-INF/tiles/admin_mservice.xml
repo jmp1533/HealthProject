@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" 
+"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+
+<!-- 공지사항 -->
+<definition name=".admin.mservice.notice.Noticelist" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+	<put-attribute name="admincontent" value="/WEB-INF/views/admin/mservice/notice/Noticelist.jsp"></put-attribute>
+</definition>
+
+<definition name=".admin.mservice.notice.write" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+	<put-attribute name="admincontent" value="/WEB-INF/views/admin/mservice/notice/write.jsp"></put-attribute>
+</definition>
+
+<definition name=".admin.mservice.notice.update" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+	<put-attribute name="admincontent" value="/WEB-INF/views/admin/mservice/notice/update.jsp"></put-attribute>
+</definition>
+
+<definition name=".admin.mservice.notice.view" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+	<put-attribute name="admincontent" value="/WEB-INF/views/admin/mservice/notice/view.jsp"></put-attribute>
+</definition>
+
+<!-- FAQ -->
+<definition name=".admin.mservice.faq.list" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+	<put-attribute name="admincontent" value="/WEB-INF/views/admin/mservice/faq/list.jsp"></put-attribute>
+</definition>
+
+<definition name=".admin.mservice.faq.view" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+	<put-attribute name="admincontent" value="/WEB-INF/views/admin/mservice/faq/view.jsp"></put-attribute>
+</definition>
+
+<definition name=".admin.mservice.faq.write" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+	<put-attribute name="admincontent" value="/WEB-INF/views/admin/mservice/faq/write.jsp"></put-attribute>
+</definition>
+
+<definition name=".admin.mservice.faq.update" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+	<put-attribute name="admincontent" value="/WEB-INF/views/admin/mservice/faq/update.jsp"></put-attribute>
+</definition>
+
+<!-- Q&A -->
+
+</tiles-definitions>

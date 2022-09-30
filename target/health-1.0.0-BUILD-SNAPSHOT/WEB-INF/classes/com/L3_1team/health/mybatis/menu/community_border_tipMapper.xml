@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.L3_1team.health.mybatis.menu.community_border_tipMapper">
+	<resultMap type="com.L3_1team.health.dto.client.menu.Community_border_tip_Dto" id="DTO">
+		<!-- num 컬럼을 멤버변수 num과 매핑해라. -->
+		<result column="tip_num" property="tip_num"/>
+	<result column="tcate_num" property="tcate_num"/>
+		<result column="id" property="id"/>
+		<result column="tip_title" property="tip_title"/>
+		<result column="tip_content" property="tip_content"
+					jdbcType="CLOB" javaType="string"/>
+		<result column="tip_date" property="tip_date"/>
+		<result column="tip_hits" property="tip_hits"/>
+		<result column="count" property="count"/>
+		<result column="tcate_name" property="tcate_name"/>
+	</resultMap>
+	
+	<select id="main" resultMap="DTO">
+		select * from
+			(select aa.*,rownum rnum from
+				(select * from tiptitle
+					order by tip_num desc)aa
+		)where <![CDATA[ rnum>=1 and rnum<=5]]>
+	</select>
+	
+	<select id="listall" resultMap="DTO">
+		select * from tiptitle
+	</select>
+	
+	<select id="getinfo" resultMap="DTO">
+		select t.*, c.count from tiptitle t,
+		(select count(*) count from tiprecommend  where tip_num=#{value}) c where t.tip_num=#{value}
+	</select>
+	
+	
+	<update id="hitupdate"  parameterType="int" >
+	 update tiptitle set tip_hits=tip_hits+1 where tip_num=#{value}
+	</update>
+	
+ 	<insert id="insert" parameterType="com.L3_1team.health.dto.client.menu.Community_border_tip_Dto">
+  	 INSERT INTO tiptitle VALUES(tiptitle_SEQ.NEXTVAL,#{tcate_num},#{id},#{tip_title},#{tip_content},sysdate,#{tip_hits})
+    </insert>
+	   
+    <update id="update">
+    update tiptitle set 
+    tcate_num=#{tcate_num}, tip_title=#{tip_title}, tip_content=#{tip_content}, tip_date=sysdate 
+    where tip_num=#{tip_num}
+    </update>
+	
+	<select id="getCount" resultType="int">
+		select NVL(count(*),0) from tiptitle
+		<where>
+			<if test="tcate_num!=0">
+			 	tcate_num=#{tcate_num}
+			</if>
+			<if test="field!=null">
+			 	and ${field} like '%' || #{keyword} || '%'
+			</if>
+		</where>
+	</select>
+		
+	<select id="cate" resultType="com.L3_1team.health.dto.category.Tip_Category_Dto">
+		select * from tipcategory
+	</select>
+	
+	<select id="getCount_reple" resultType="int" parameterType="int">
+		select NVL(count(*),0) from tipreple where tip_num=#{value}
+	</select>
+	
+	
+	<select id="list" parameterType="hashmap" resultMap="DTO">
+		select * from(select aa.*,rownum rnum from
+			(select t.tip_num ,t.id,k.tcate_name,t.tip_title,t.tip_content,t.tip_date,t.tip_hits , NVL(c.count,0) count 
+				from tiptitle t,(select count(*) count,tip_num from tiprecommend group by tip_num) c,
+				(select tcate_name,tcate_num from tipcategory) k
+                	where t.tcate_num=k.tcate_num and t.tip_num=c.tip_num(+) 
+                	<if test="tcate_num!=0">
+					 	and t.tcate_num=#{tcate_num} 
+					</if> 
+					order by t.tip_num desc)aa
+					<if test="field!=null">
+					 	where ${field} like '%' || #{keyword} || '%'
+					</if> 
+                	
+				)where <![CDATA[ rnum>=#{startRow} and rnum<=#{endRow}]]>
+	</select>
+	<!-- 이전글 -->
+	<select id="prev" resultMap="DTO">
+		select * from(
+			select * from tiptitle 
+				<![CDATA[ where tip_num<#{value} ]]>
+			 order by tip_num desc 
+		) where rownum=1
+	</select>
+	
+	<!-- 다음글 -->
+	<select id="next" resultMap="DTO">
+		select * from(
+			select * from tiptitle
+				<![CDATA[ where tip_num>#{value} ]]>
+			 order by tip_num asc 
+		) where rownum=1
+	</select>
+	
+    <insert id="reple_insert" parameterType="com.L3_1team.health.dto.client.menu.Community_border_tip_reple_Dto">
+   insert into tipreple values(tipreple_SEQ.NEXTVAL,#{tip_num},#{id},#{tr_content},sysdate)
+    </insert>
+
+    
+<select id="reple_list" parameterType="hashmap" resultType="com.L3_1team.health.dto.client.menu.Community_border_tip_reple_Dto">
+			select * from
+			(select aa.*,rownum rnum from(
+				select * from tipreple where tip_num=#{tip_num} 
+				order by tr_num desc)aa
+			)where <![CDATA[ rnum>=#{startRow} and rnum<=#{endRow}]]>
+</select>
+	
+	
+<delete id="tip_delete" parameterType="hashmap">
+  delete from tiptitle where tip_num=#{tip_num} 
+  <if test="id!=null">
+  	and id=#{id}
+  </if>
+</delete>
+<delete id="reple_delete"  parameterType="int">
+  delete from tipreple where tip_num=#{value}
+</delete>	
+	<delete id="commend_delete"  parameterType="int">
+  delete from tiprecommend where tip_num=#{value}
+</delete>	
+
+	<select id="commend_count"  parameterType="int" resultType="int">
+	select NVL(count(*),0) from tiprecommend where tip_num=#{value}
+	</select>
+	<select id="commend_check" resultType="com.L3_1team.health.dto.category.commend_Dto">
+	select * from tiprecommend where tip_num=#{tip_num} and id=#{id}
+	</select>
+	<insert id="commend_insert" >
+	INSERT INTO tiprecommend VALUES(tiprecommend_SEQ.NEXTVAL,#{tip_num},#{id})
+	</insert>
+</mapper>

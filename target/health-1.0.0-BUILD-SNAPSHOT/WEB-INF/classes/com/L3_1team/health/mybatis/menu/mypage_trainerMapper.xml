@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.L3_1team.health.mybatis.menu.mypage_trainerMapper">
+	<select id="search" parameterType="Hashmap" resultType="com.L3_1team.health.dto.client.user.TrainerDto">
+		select * from trainers
+		where t_id=#{t_id} and t_pwd=#{t_pwd}
+	</select>
+
+	<select id="search1" parameterType="Hashmap" resultType="int">
+		select NVL(count(*),0) from trainers
+		where t_id=#{t_id} and t_pwd=#{t_pwd}
+	</select>
+
+	<update id="update" parameterType="com.L3_1team.health.dto.client.user.TrainerDto">
+		update trainers 
+			set t_pwd=#{t_pwd}, t_name=#{t_name}, zipcode=#{zipcode}, t_addr=#{t_addr},
+			t_company=#{t_company}, t_phone=#{t_phone}, t_birth=#{t_birth}, t_email=#{t_email},
+			t_img=#{t_img}, t_question=#{t_question}, t_answer=#{t_answer}, t_gender=#{t_gender},
+			t_height=#{t_height}, t_weight=#{t_weight}, t_introduction=#{t_introduction}
+		where t_id=#{t_id}
+	</update>
+	
+	
+	<!-- 회원탈퇴 -->
+	<update id="out" parameterType="com.L3_1team.health.dto.client.user.TrainerDto">
+		update trainers 
+		set t_out=2
+		where t_id=#{t_id}
+	</update>
+	
+	<insert id="outreason" parameterType="com.L3_1team.health.dto.client.user.Mypage_outDto">
+		insert into out
+		values(out_seq.nextval,#{id},#{out_reason},sysdate)
+	</insert>
+	
+	
+	<select id="getinfo" parameterType="string" resultType="com.L3_1team.health.dto.client.user.TrainerDto">
+		select * from trainers
+		where t_id=#{value}
+	</select>
+	
+	<select id="rs" parameterType="String" resultType="com.L3_1team.health.dto.client.menu.Finder_company_Dto">
+		select * from business where t_id=#{value}
+	</select>
+	
+	<insert id="ri" parameterType="com.L3_1team.health.dto.client.menu.Finder_company_Dto">
+		insert into business 
+		values(business_SEQ.NEXTVAL,#{t_id},#{b_corporatenum}, #{b_name}, #{b_addr},
+		#{zipcode},	#{b_phone}, #{b_email}, #{b_content}, #{b_x}, #{b_y},
+		#{b_condition}, sysdate)
+	</insert>
+	
+	<update id="ru">
+		update business 
+		set b_name=#{b_name}, b_corporatenum=#{b_corporatenum}, zipcode=#{zipcode}, b_addr=#{b_addr},
+			b_phone=#{b_phone}, b_email=#{b_email}, b_content=#{b_content} 
+		where b_num = #{b_num}
+	</update>
+	
+	<insert id="bi" parameterType="Hashmap">
+		insert into businessimg values(businessimg_SEQ.nextval, #{b_num}, #{savefilename})
+	</insert>
+	
+	<select id="bs" parameterType="int" resultType="String">
+		select bi_img from businessimg where b_num=#{value}
+	</select>
+	
+	<delete id="bd" parameterType="Hashmap">
+		delete from businessimg where b_num = #{b_num}
+	</delete>
+</mapper>

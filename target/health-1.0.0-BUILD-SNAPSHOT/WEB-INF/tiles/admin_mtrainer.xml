@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" 
+"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+
+<definition name=".admin.mtrainer.list.list" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+	<put-attribute name="admincontent" value="/WEB-INF/views/admin/mtrainer/list/list.jsp"></put-attribute>
+</definition>
+
+<definition name=".admin.mtrainer.list.view" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+	<put-attribute name="admincontent" value="/WEB-INF/views/admin/mtrainer/list/view.jsp"></put-attribute>
+</definition>
+
+<definition name=".admin.mtrainer.record.list" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+	<put-attribute name="admincontent" value="/WEB-INF/views/admin/mtrainer/record/list.jsp"></put-attribute>
+</definition>
+
+<definition name=".admin.mtrainer.apply.list" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+	<put-attribute name="admincontent" value="/WEB-INF/views/admin/mtrainer/apply/list.jsp"></put-attribute>
+</definition>
+
+<definition name=".admin.mtrainer.apply.view" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+	<put-attribute name="admincontent" value="/WEB-INF/views/admin/mtrainer/apply/view.jsp"></put-attribute>
+</definition>
+</tiles-definitions>

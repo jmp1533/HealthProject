@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" 
+"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+
+<definition name=".admin.mhealth.list.CompanyList" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+	<put-attribute name="admincontent" value="/WEB-INF/views/admin/mhealth/list/CompanyList.jsp"></put-attribute>
+</definition>
+
+<definition name=".admin.mhealth.list.Companyview" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+	<put-attribute name="admincontent" value="/WEB-INF/views/admin/mhealth/list/Companyview.jsp"></put-attribute>
+</definition>
+
+</tiles-definitions>
+

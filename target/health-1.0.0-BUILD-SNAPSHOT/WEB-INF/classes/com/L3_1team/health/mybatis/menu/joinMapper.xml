@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.L3_1team.health.mybatis.menu.joinMapper">
+
+	<select id="getCount" parameterType="hashmap" resultType="int">
+		select NVL(count(*),0) from management
+			where t_id = #{t_id}
+			<if test="field!=null">
+			 	and ${field} like '%' || #{keyword} || '%'
+			</if>
+	</select>
+	
+	<select id="list" parameterType="hashmap" resultType="com.L3_1team.health.dto.client.menu.management_Dto">
+		select * from
+			(select aa.*,rownum rnum from(
+				select * from management where t_id=#{t_id}
+					order by um_num asc)aa
+				<if test="field!=null">
+				 	where ${field} like '%' || #{keyword} || '%'
+				</if> 	
+		)where <![CDATA[ rnum>=#{startRow} and rnum<=#{endRow}]]>
+	</select>
+	
+	<select id="search" parameterType="String" resultType="com.L3_1team.health.dto.client.user.UserDto">
+		select * from users where u_id=#{u_id}
+	</select>
+	
+	<delete id="delete" parameterType="String">
+		delete from management where u_id=#{u_id}
+	</delete>
+	
+	<select id="userinfo" parameterType="String" resultType="com.L3_1team.health.dto.client.menu.userinfo_Dto">
+		select * from
+			(select * from userinfo 
+				where u_id=#{value} order by ui_date desc)
+		where rownum=1
+	</select>
+	
+	<select id="applyCount" parameterType="hashmap" resultType="int">
+		select NVL(count(*),0) from join
+			where t_id = #{t_id}
+			<if test="field!=null">
+			 	and ${field} like '%' || #{keyword} || '%'
+			</if>
+	</select>
+	
+	<select id="applylist" parameterType="hashmap" resultType="com.L3_1team.health.dto.client.menu.join_Dto">
+		select * from
+			(select aa.*,rownum rnum from(
+				select * from join where t_id=#{t_id}
+					order by join_num asc)aa
+				<if test="field!=null">
+				 	where ${field} like '%' || #{keyword} || '%'
+				</if> 	
+		)where <![CDATA[ rnum>=#{startRow} and rnum<=#{endRow}]]>
+	</select>
+	
+	<delete id="joindelete" parameterType="String">
+		delete from join where u_id=#{u_id}
+	</delete>
+	
+	<insert id="minsert" parameterType="hashmap">
+		insert into management values(management_SEQ.NEXTVAL, #{t_id}, #{u_id}, sysdate)
+	</insert>
+	
+<!-- 
+	<select id="joincount" parameterType="String" resultType="int">
+		select count(*) from join where u_id=#{u_id}
+	</select>
+	
+	<select id="joinsearch" parameterType="hashmap" resultType="int">
+		select count(*) from join where u_id=#{u_id} and t_id=#{t_id}
+	</select>
+	
+	<insert id="joininsert" parameterType="hashmap">
+		insert into join values(join_seq.nextval, #{t_id}, #{u_id}, sysdate, 'false')
+	</insert>
+	
+	<delete id="joindelete" parameterType="String">
+		delete from join where u_id=#{value}
+	</delete>
+	 -->
+</mapper>

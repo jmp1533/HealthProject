@@ -1,0 +1,95 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#allch").click(function(){
+			if($(this).is(':checked')){
+				$("input[name='delck']").prop("checked", true); 
+			}else{
+				$("input[name='delck']").prop("checked", false); 
+			}
+		});
+	});
+</script>
+</head>
+<body>
+<h2>운동영상</h2>
+	<a href="/admin/mboard/movie/health_movie_list?cateNum=0">전체</a>
+<c:forEach var="cate" items="${vcate }">
+	<a href="/admin/mboard/movie/health_movie_list?cateNum=${cate.vcate_num }">${cate.vcate_name }</a>
+</c:forEach> 
+<form method="post" action="/admin/mboard/movie/delete">
+	<input type="submit" value="삭제">
+<table>
+	<tr>
+		<th><input type="checkbox" id="allch" name="allch"></th>
+		<th>글번호</th><th>이미지</th><th>글제목</th><th>조회수</th>
+	</tr>
+	<c:forEach var="dto" items="${list }">
+		<tr>
+			<td>
+				<input type="checkbox" name="delck" value="${dto.v_num}">
+			</td>
+			<td>${dto.v_num }</td>
+			<td><a href="${dto.v_image }" target="_blank"><img src="resources/upload/${dto.v_image}" style="width:60px; height:48px"></a></td>
+			<td><a href="/admin/mboard/movie/health_movie_view?num=${dto.v_num }">${dto.v_title }</a></td>
+			<td>${dto.v_hits }</td>
+		</tr>
+	</c:forEach>
+</table>
+</form>
+<div>
+	<form method="get" action="/admin/mboard/movie/health_movie_list">
+		<input type="hidden" name="cateNum" value="${cateNum }">
+		<select name="field">
+			<option value="v_title">글제목</option>
+			<option value="v_content">글내용</option>
+		</select>
+		<input type="text" name="keyword">
+		<input type="submit" value="검색">
+	</form>
+</div>
+<a href="/admin/mboard/movie/health_movie_insert">글쓰기</a>
+<div ><!-- 페이징처리 -->
+	
+	<c:choose>
+		<c:when test="${pu.startPageNum>10 }">
+			<a href="/admin/mboard/movie/health_movie_list?pageNum=${pu.startPageNum-1 }&cateNum=${cateNum}
+				&field=${field}&keyword=${keyword}">[이전]</a>
+		</c:when>
+		<c:otherwise>
+			[이전]
+		</c:otherwise>
+	</c:choose>
+	<c:forEach var="i" begin="${pu.startPageNum }" end="${pu.endPageNum }">
+		<c:choose>
+			<c:when test="${i==pu.pageNum }"> <!--현재페이지만 빨간색으로 표시-->
+				<a href="/admin/mboard/movie/health_movie_list?pageNum=${i}&cateNum=${cateNum}
+				&field=${field}&keyword=${keyword}"
+				><span style="color:red">[${i }]</span>
+				</a>
+			</c:when>
+			<c:otherwise>
+				<a href="/admin/mboard/movie/health_movie_list?pageNum=${i}&cateNum=${cateNum}
+				&field=${field}&keyword=${keyword}">[${i }]</a>
+			</c:otherwise>
+		</c:choose>
+	</c:forEach>
+	<c:choose>
+		<c:when test="${pu.endPageNum<pu.totalPageCount }">
+			<a href="/admin/mboard/movie/health_movie_list?pageNum=${pu.endPageNum+1 }&cateNum=${cateNum}
+				&field=${field}&keyword=${keyword}">[다음]</a>
+		</c:when>
+		<c:otherwise>
+			[다음]
+		</c:otherwise>
+	</c:choose>
+</div>
+</body>
+</html>

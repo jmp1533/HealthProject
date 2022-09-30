@@ -1,0 +1,227 @@
+package com.L3_1team.health.controller.admin;
+
+import java.util.HashMap;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.L3_1team.health.Utility.Page.PageUtil;
+import com.L3_1team.health.dto.admin.admin_trainerslog_Dto;
+import com.L3_1team.health.dto.client.menu.People_traner_Dto;
+import com.L3_1team.health.service.admin.admin_mtrainer_Service;
+
+@Controller
+public class admin_mtrainer_Controller {
+	@Inject
+	private admin_mtrainer_Service mtrainer_Service;
+
+	public void setMtrainer_Service(admin_mtrainer_Service mtrainer_Service) {
+		this.mtrainer_Service = mtrainer_Service;
+	}
+
+	@RequestMapping(value = "/admin/mtrainer/list/list", method = RequestMethod.GET)
+	public ModelAndView list(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+			@RequestParam(value = "field", required = false) String field,
+			@RequestParam(value = "keyword", required = false) String keyword,
+			@RequestParam(value = "t_out", defaultValue = "0") int t_out) {
+		
+		ModelAndView mv = new ModelAndView(".admin.mtrainer.list.list");
+		HashMap<String, Object> map = new HashMap<String, Object>();		
+		PageUtil pu = null;
+		List<People_traner_Dto> list = null;
+		int totalRowCount = 0;
+		
+		if (field == null && keyword == null) {
+			field = "t_id";
+			keyword = "";
+		}
+		
+		map.put("field", field);
+		map.put("keyword", keyword);
+		map.put("t_out", t_out);
+		
+		totalRowCount = mtrainer_Service.search(map);
+
+		pu = new PageUtil(pageNum, totalRowCount, 10, 10);
+
+		map.put("startRow", pu.getStartRow());
+		map.put("endRow", pu.getEndRow());
+
+		list = mtrainer_Service.list(map);
+
+		mv.addObject("pu", pu);
+		mv.addObject("list", list);
+		mv.addObject("field", field);
+		mv.addObject("keyword", keyword);
+		mv.addObject("t_out", t_out);
+		
+		return mv;
+	}
+
+	@RequestMapping(value = "/admin/mtrainer/list/view", method = RequestMethod.GET)
+	public String getinfo(@RequestParam("id") String id, Model model) {
+		People_traner_Dto dto = mtrainer_Service.getinfo(id);
+		model.addAttribute("dto", dto);
+		return ".admin.mtrainer.list.view";
+	}
+
+	@RequestMapping(value = "/admin/mtrainer/apply/list", method = RequestMethod.GET)
+	public String applylist(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+			@RequestParam(value = "field", required = false) String field,
+			@RequestParam(value = "keyword", required = false) String keyword, Model model) {
+
+		list(pageNum, model, field, keyword);
+
+		return ".admin.mtrainer.apply.list";
+	}
+
+	@RequestMapping(value = "/admin/mtrainer/apply/view", method = RequestMethod.GET)
+	public String applyinfo(@RequestParam("id") String id, Model model) {
+		People_traner_Dto dto = mtrainer_Service.getinfo(id);
+		model.addAttribute("dto", dto);
+		return ".admin.mtrainer.apply.view";
+	}
+
+	@RequestMapping(value = "/admin/mtrainer/apply/update", method = RequestMethod.POST)
+	public String applyupdate(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+			//
+			@RequestParam(value = "field", required = false) String field,
+			@RequestParam(value = "keyword", required = false) String keyword,
+			//
+			HttpServletRequest request, Model model) {
+
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		String delck[] = request.getParameterValues("delck");
+
+		for (int i = 0; i < delck.length; i++) {
+			String t_id = delck[i].toString();
+
+			map.put("t_condition", 1);
+			map.put("t_id", t_id);
+
+			mtrainer_Service.tupdate(map);
+		}
+
+		list(pageNum, model, field, keyword);
+
+		return ".admin.mtrainer.apply.list";
+	}
+
+	public void list(int pageNum, Model model) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		int totalRowCount = 0;
+		PageUtil pu = null;
+		List<People_traner_Dto> list = null;
+		
+		map.put("t_condition", 2);
+		totalRowCount = mtrainer_Service.getCount(map);
+
+		pu = new PageUtil(pageNum, totalRowCount, 9, 10);
+
+		map.put("startRow", pu.getStartRow());
+		map.put("endRow", pu.getEndRow());
+
+		list = mtrainer_Service.list(map);
+
+		model.addAttribute("list", list);
+		model.addAttribute("pu", pu);
+	}
+
+	/*
+	 * public void list(int pageNum, Model model){ HashMap<String, Object> map = new
+	 * HashMap<String, Object>(); map.put("t_condition", 2); int totalRowCount =
+	 * mtrainer_Service.getCount(map);
+	 * 
+	 * for(int i=0; i<delck.length; i++){ String t_id = delck[i].toString();
+	 * 
+	 * map.put("t_condition", 1); map.put("t_id", t_id);
+	 * 
+	 * mtrainer_Service.tupdate(map); }
+	 * 
+	 * list(pageNum, model,field, keyword);
+	 * 
+	 * 
+	 * return ".admin.mtrainer.apply.list"; }
+	 */
+
+	public void list(int pageNum, Model model, String field, String keyword) {
+
+		ModelAndView mv = new ModelAndView(".admin.mtrainer.list.list");
+		if (field == null && keyword == null) {
+			field = "t_id";
+			keyword = "";
+		}
+
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("field", field);
+		map.put("keyword", keyword);
+		map.put("t_condition", 2);
+		map.put("t_out", 1);
+		int totalRowCount = mtrainer_Service.getCount(map);
+
+		PageUtil pu = new PageUtil(pageNum, totalRowCount, 10, 10);
+
+		map.put("startRow", pu.getStartRow());
+		map.put("endRow", pu.getEndRow());
+
+		List<People_traner_Dto> list = mtrainer_Service.list(map);
+
+		model.addAttribute("list", list);
+		model.addAttribute("pu", pu);
+		mv.addObject("field", field);
+		mv.addObject("keyword", keyword);
+
+	}
+
+	// Å»ÅðÃ³¸®
+	@RequestMapping(value = "/admin/mtrainer/list/out", method = RequestMethod.POST)
+	public String out(HttpServletRequest request) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		String delck[] = request.getParameterValues("delck");
+
+		for (int i = 0; i < delck.length; i++) {
+			String t_id = delck[i].toString();
+
+			map.put("t_id", t_id);
+
+			mtrainer_Service.out(t_id);
+		}
+		return "redirect:/admin/mtrainer/list/list";
+	}
+
+	@RequestMapping(value = "/admin/mtrainer/record/list", method = RequestMethod.GET)
+	public ModelAndView recordlist(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+			@RequestParam(value = "field", required = false) String field,
+			@RequestParam(value = "keyword", required = false) String keyword) {
+		ModelAndView mv = new ModelAndView(".admin.mtrainer.record.list");
+		if (field == null && keyword == null) {
+			field = "t_id";
+			keyword = "";
+		}
+
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("field", field);
+		map.put("keyword", keyword);
+		int totalRowCount = mtrainer_Service.recordCount(map);
+		PageUtil pu = new PageUtil(pageNum, totalRowCount, 9, 10);
+
+		map.put("startRow", pu.getStartRow());
+		map.put("endRow", pu.getEndRow());
+
+		List<admin_trainerslog_Dto> list = mtrainer_Service.recordlist(map);
+
+		mv.addObject("list", list);
+		mv.addObject("pu", pu);
+		mv.addObject("field", field);
+		mv.addObject("keyword", keyword);
+		return mv;
+	}
+}

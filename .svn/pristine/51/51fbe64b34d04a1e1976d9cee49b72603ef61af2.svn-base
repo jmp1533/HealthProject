@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" 
+"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+
+<definition name=".client.menu.people.user.list" template="/WEB-INF/views/health/main/layout.jsp">
+ 	<put-attribute name="content" value="/WEB-INF/views/client/menu/people/user/list.jsp"></put-attribute>
+</definition>
+<definition name=".client.menu.people.user.view" template="/WEB-INF/views/health/main/layout.jsp">
+ 	<put-attribute name="content" value="/WEB-INF/views/client/menu/people/user/view.jsp"></put-attribute>
+</definition>
+<definition name=".client.menu.people.user.write" template="/WEB-INF/views/health/main/layout.jsp">
+ 	<put-attribute name="content" value="/WEB-INF/views/client/menu/people/user/write.jsp"></put-attribute>
+</definition>
+<definition name=".client.menu.people.user.update" template="/WEB-INF/views/health/main/layout.jsp">
+ 	<put-attribute name="content" value="/WEB-INF/views/client/menu/people/user/update.jsp"></put-attribute>
+</definition>
+
+</tiles-definitions>

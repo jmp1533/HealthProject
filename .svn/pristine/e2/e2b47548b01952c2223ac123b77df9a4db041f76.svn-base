@@ -1,0 +1,64 @@
+package com.L3_1team.health.service.admin;
+
+import java.util.HashMap;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
+import com.L3_1team.health.dao.admin.admin_service_notice_Dao;
+import com.L3_1team.health.dto.client.menu.service_notice_Dto;
+
+@Service
+public class admin_service_notice_service {
+	@Inject admin_service_notice_Dao notice_Dao;
+	
+	public void setNotice_Dao(admin_service_notice_Dao notice_Dao) {
+		this.notice_Dao = notice_Dao;
+	}
+	
+	public List<service_notice_Dto> noticelist(){
+		return notice_Dao.noticelist();
+	}
+	
+	public int getCount(){
+		return notice_Dao.getCount();
+	}
+	public List<service_notice_Dto> list(HashMap<String, Object>map){
+		return  notice_Dao.list(map);
+	}
+	
+	public service_notice_Dto getinfo(int noti_num){//상세보기,조회수증가
+		notice_Dao.addhit(noti_num);
+		return notice_Dao.getinfo(noti_num);
+	}
+	
+	
+	public service_notice_Dto prev(int noti_num){//이전글
+		service_notice_Dto dto=notice_Dao.prev(noti_num);
+		return dto;
+	}
+	public service_notice_Dto next(int noti_num){//다음글
+		service_notice_Dto dto=notice_Dao.next(noti_num);
+		return dto;
+	}
+	
+	public int insert(service_notice_Dto dto){//쓰기
+		return notice_Dao.insert(dto);
+	}
+	
+	public int update(service_notice_Dto dto){//수정
+		return notice_Dao.update(dto);
+	}
+	
+	public int delete(int noti_num){//삭제
+		return notice_Dao.delete(noti_num);
+	}
+	
+	//검색
+	public int search(HashMap<String, Object>map){
+		return notice_Dao.search(map);
+	}
+		
+}

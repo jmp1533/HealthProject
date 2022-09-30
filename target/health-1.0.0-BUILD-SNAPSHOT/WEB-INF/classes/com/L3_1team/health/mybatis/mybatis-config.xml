@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+  <mappers>
+    <mapper resource="com/L3_1team/health/mybatis/menu/community_border_tipMapper.xml"/>
+    <mapper resource="com/L3_1team/health/mybatis/menu/community_border_freeMapper.xml"/>
+    <mapper resource="com/L3_1team/health/mybatis/menu/diaryMapper.xml"/>
+    <mapper resource="com/L3_1team/health/mybatis/user/insert_user.xml"/>
+    <mapper resource="com/L3_1team/health/mybatis/user/insert_trainer.xml"/>
+    <mapper resource="com/L3_1team/health/mybatis/user/insert_addr.xml"/>
+    <mapper resource="com/L3_1team/health/mybatis/menu/health_movieMapper.xml"/> 
+    <mapper resource="com/L3_1team/health/mybatis/menu/People_tranerMapper.xml"/>
+    <mapper resource="com/L3_1team/health/mybatis/menu/People_userMapper.xml"/>
+    <mapper resource="com/L3_1team/health/mybatis/menu/ReviewBoardMapper.xml"/>
+    <mapper resource="com/L3_1team/health/mybatis/menu/service_noticeMapper.xml"/>
+    <mapper resource="com/L3_1team/health/mybatis/menu/mypage_trainerMapper.xml"/>
+    <mapper resource="com/L3_1team/health/mybatis/menu/mypage_userMapper.xml"/>
+    <mapper resource="com/L3_1team/health/mybatis/menu/service_faqMapper.xml"/>
+    <mapper resource="com/L3_1team/health/mybatis/menu/service_qnaMapper.xml"/>
+    <mapper resource="com/L3_1team/health/mybatis/menu/diary_chartMapper.xml"/>
+    <mapper resource="com/L3_1team/health/mybatis/menu/diaryMapper.xml"/>
+    <mapper resource="com/L3_1team/health/mybatis/popup/foodpoupMapper.xml"/>
+    <mapper resource="com/L3_1team/health/mybatis/popup/popup_msgMapper.xml"/>
+    <mapper resource="com/L3_1team/health/mybatis/menu/finder_companyMapper.xml"/>
+    <mapper resource="com/L3_1team/health/mybatis/user/AccountFinder_Mapper.xml"/>
+    <mapper resource="com/L3_1team/health/mybatis/admin/admin_muser_list_listMapper.xml"/>
+    <mapper resource="com/L3_1team/health/mybatis/admin/admin_mstatistics_userMapper.xml"/>
+    <mapper resource="com/L3_1team/health/mybatis/admin/admin_mhealth_applyMapper.xml"/>
+    <mapper resource="com/L3_1team/health/mybatis/admin/admin_mservice_qna_Mapper.xml"/>
+    <mapper resource="com/L3_1team/health/mybatis/menu/joinMapper.xml"/>
+
+  </mappers>
+</configuration>
+
+
+
+
+

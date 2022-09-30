@@ -1,0 +1,77 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+       <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript"
+	src="/resources/js/jquery-1.10.1.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+$("#delete").click(function(){
+	$("#pop").css("display","block")
+	
+});
+$("#cancel").click(function(){
+	$("#pop").css("display","none")
+	
+});
+})
+</script> 
+</head>
+<body>
+
+
+		<a style="margin-left: 60%;" id="delete">삭제</a>// <a id="update" href="/client/menu/diary/update?d_num=${ diary.d_num}" >수정</a> <br>
+
+	<div id="pop"
+ style="  border-color:black; border-width:1px; border-style:solid; display:none; 
+ margin-left:30%; background-color:fuchsia ; height: 100px;width: 150px;
+  position: absolute;" >
+  정말로 삭제 하시겠습니까<br>
+  <a href="/client/menu/diary/delete?d_num=${diary.d_num }"><input type="button" value="삭제" id="dele"></a>
+   <input type="button" id="cancel" value="취소">
+</div>
+${diary.d_num }<br>
+${diary.id }<br>
+제목 ${diary.d_title }<br>
+날짜 ${diary.d_date }<br>
+
+	<c:forEach var="dto" items="${list}">
+	<table border="1" width="600">
+	
+<tr><td>사진</td><td> 내용 </td> </tr>
+	
+		<tr> 
+		  <td><img src="${dto.dm_img }" id="add_foodimg" style="width: auto;height: auto; max-height: 110px; max-width:110px; "></td>
+		  <td>
+		  <ul>
+		    <li>식사시간 -${dto.dm_time } 
+		    </li>
+		        <li>칼로리 -${dto.calorie  }
+		    </li>
+		        <li>지방 -${dto.fat }
+		    </li>
+		        <li>탄수화물 -${dto.cardohydrate}
+		    </li>
+		        <li>콜래스트롤- ${dto.cholesterol}
+		    </li>
+		    <li>
+		               단백질 -${dto.protein }
+		    </li>
+		  </ul>
+		  </td> 
+		</tr>	
+	
+		
+	</table>
+	</c:forEach>
+
+내용<br>
+
+${diary.d_content }
+</body>
+</html>

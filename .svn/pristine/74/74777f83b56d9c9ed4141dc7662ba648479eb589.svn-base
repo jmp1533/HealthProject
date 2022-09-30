@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" 
+"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+
+<!-- 자유게시판 -->
+<definition name=".admin.mboard.free.list" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+	<put-attribute name="admincontent" value="/WEB-INF/views/admin/mboard/free/list.jsp"></put-attribute>
+</definition>
+
+<definition name=".admin.mboard.free.view" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+	<put-attribute name="admincontent" value="/WEB-INF/views/admin/mboard/free/view.jsp"></put-attribute>
+</definition>
+
+<!-- 운동방법 -->
+<definition name=".admin.mboard.movie.health_movie_list" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+	<put-attribute name="admincontent" value="/WEB-INF/views/admin/mboard/movie/health_movie_list.jsp"></put-attribute>
+</definition>
+
+<definition name=".admin.mboard.movie.health_movie_view" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+	<put-attribute name="admincontent" value="/WEB-INF/views/admin/mboard/movie/health_movie_view.jsp"></put-attribute>
+</definition>
+
+<definition name=".admin.mboard.movie.health_movie_insert" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+	<put-attribute name="admincontent" value="/WEB-INF/views/admin/mboard/movie/health_movie_insert.jsp"></put-attribute>
+</definition>
+
+<definition name=".admin.mboard.movie.update" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+	<put-attribute name="admincontent" value="/WEB-INF/views/admin/mboard/movie/update.jsp"></put-attribute>
+</definition>
+<!-- 성공후기 -->
+<definition name=".admin.mboard.review.list" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+	<put-attribute name="admincontent" value="/WEB-INF/views/admin/mboard/review/list.jsp"></put-attribute>
+</definition>
+
+<definition name=".admin.mboard.review.view" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+	<put-attribute name="admincontent" value="/WEB-INF/views/admin/mboard/review/view.jsp"></put-attribute>
+</definition>
+
+<!-- 팁&노하우 -->
+<definition name=".admin.mboard.tip.list" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+	<put-attribute name="admincontent" value="/WEB-INF/views/admin/mboard/tip/list.jsp"></put-attribute>
+</definition>
+
+<definition name=".admin.mboard.tip.view" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+	<put-attribute name="admincontent" value="/WEB-INF/views/admin/mboard/tip/view.jsp"></put-attribute>
+</definition>
+</tiles-definitions>
+

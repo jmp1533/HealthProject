@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" 
+"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+<definition name=".client.menu.comunity.border.free.list" template="/WEB-INF/views/health/main/layout.jsp">
+ <put-attribute name="content" value="/WEB-INF/views/client/menu/comunity/border/free/list.jsp"></put-attribute>
+</definition>
+<definition name=".client.menu.comunity.border.free.write" template="/WEB-INF/views/health/main/layout.jsp">
+ <put-attribute name="content" value="/WEB-INF/views/client/menu/comunity/border/free/writers.jsp"></put-attribute>
+</definition>
+<definition name=".client.menu.comunity.border.free.view" template="/WEB-INF/views/health/main/layout.jsp">
+ <put-attribute name="content" value="/WEB-INF/views/client/menu/comunity/border/free/view.jsp"></put-attribute>
+</definition>
+<definition name=".client.menu.comunity.border.free.updateform" template="/WEB-INF/views/health/main/layout.jsp">
+ <put-attribute name="content" value="/WEB-INF/views/client/menu/comunity/border/free/update.jsp"></put-attribute>
+</definition>
+
+
+
+<definition name=".client.menu.comunity.border.tip.list" template="/WEB-INF/views/health/main/layout.jsp">
+ <put-attribute name="content" value="/WEB-INF/views/client/menu/comunity/border/tip/list.jsp"></put-attribute>
+</definition>
+<definition name=".client.menu.comunity.border.tip.write" template="/WEB-INF/views/health/main/layout.jsp">
+ <put-attribute name="content" value="/WEB-INF/views/client/menu/comunity/border/tip/writers.jsp"></put-attribute>
+</definition>
+<definition name=".client.menu.comunity.border.tip.view" template="/WEB-INF/views/health/main/layout.jsp">
+ <put-attribute name="content" value="/WEB-INF/views/client/menu/comunity/border/tip/view.jsp"></put-attribute>
+</definition>
+<definition name=".client.menu.comunity.border.tip.updateform" template="/WEB-INF/views/health/main/layout.jsp">
+ <put-attribute name="content" value="/WEB-INF/views/client/menu/comunity/border/tip/update.jsp"></put-attribute>
+</definition>
+
+</tiles-definitions>
+

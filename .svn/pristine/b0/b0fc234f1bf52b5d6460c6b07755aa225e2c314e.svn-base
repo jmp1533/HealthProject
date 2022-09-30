@@ -1,0 +1,30 @@
+package com.L3_1team.health.dto.category;
+
+public class Health_Category_Dto {
+	private int vcate_num;
+	private String vcate_name;
+
+	public Health_Category_Dto() {}
+
+	public Health_Category_Dto(int vcate_num, String vcate_name) {
+		this.vcate_num = vcate_num;
+		this.vcate_name = vcate_name;
+	}
+
+	public int getVcate_num() {
+		return vcate_num;
+	}
+
+	public void setVcate_num(int vcate_num) {
+		this.vcate_num = vcate_num;
+	}
+
+	public String getVcate_name() {
+		return vcate_name;
+	}
+
+	public void setVcate_name(String vcate_name) {
+		this.vcate_name = vcate_name;
+	}
+	
+}

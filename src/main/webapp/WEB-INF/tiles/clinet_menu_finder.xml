@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" 
+"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+
+<definition name=".client.menu.finder.park.ParkList" template="/WEB-INF/views/health/main/layout.jsp">
+ 	<put-attribute name="content" value="/WEB-INF/views/client/menu/finder/park/ParkList.jsp"></put-attribute>
+</definition>
+
+<definition name=".client.menu.finder.park.Parkview" template="/WEB-INF/views/health/main/layout.jsp">
+ 	<put-attribute name="content" value="/WEB-INF/views/client/menu/finder/park/Parkview.jsp"></put-attribute>
+</definition>
+
+<definition name=".client.menu.finder.company.CompanyList" template="/WEB-INF/views/health/main/layout.jsp">
+ 	<put-attribute name="content" value="/WEB-INF/views/client/menu/finder/company/CompanyList.jsp"></put-attribute>
+</definition>
+
+<definition name=".client.menu.finder.company.Companyview" template="/WEB-INF/views/health/main/layout.jsp">
+ 	<put-attribute name="content" value="/WEB-INF/views/client/menu/finder/company/Companyview.jsp"></put-attribute>
+</definition>
+</tiles-definitions>
+

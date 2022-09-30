@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.L3_1team.health.mybatis.menu.mypage_userMapper">
+
+	<select id="search" parameterType="Hashmap" resultType="com.L3_1team.health.dto.client.user.UserDto">
+		select * from users
+		where u_id=#{u_id} and u_pwd=#{u_pwd}
+	</select>
+	
+	<select id="search1" parameterType="Hashmap" resultType="int">
+		select NVL(count(*),0) from users
+		where u_id=#{u_id} and u_pwd=#{u_pwd}
+	</select>
+
+	<update id="update" parameterType="com.L3_1team.health.dto.client.user.UserDto">
+		update users set u_pwd = #{u_pwd}, u_question = #{u_question}, u_answer = #{u_answer},
+			u_name = #{u_name}, u_img = #{u_img}, u_phone = #{u_phone}, u_email = #{u_email},
+			u_zipcode = #{u_zipcode}, u_addr = #{u_addr}, u_birth = #{u_birth}, 
+			u_gender = #{u_gender}, u_targetweight = #{u_targetweight}
+		where u_id=#{u_id}
+	</update>
+	
+	
+	
+	<!-- 회원탈퇴 -->
+	<update id="out" parameterType="com.L3_1team.health.dto.client.user.UserDto">
+		update users 
+		set u_out=2
+		where u_id=#{u_id}
+	</update>
+	
+	<insert id="outreason" parameterType="com.L3_1team.health.dto.client.user.Mypage_outDto">
+		insert into out
+		values(out_seq.nextval,#{id},#{out_reason},sysdate)
+	</insert>
+	
+	
+	<select id="getinfo" parameterType="string" resultType="com.L3_1team.health.dto.client.user.UserDto">
+		select * from users
+		where u_id=#{value}
+	</select>
+	
+	
+	<!-- 내트레이너 -->
+	<select id="mytrainer" parameterType="string" resultType="com.L3_1team.health.dto.client.menu.Mypage_management_Dto">
+		select t.t_id,t.t_name,t.zipcode,t.t_addr,t.t_company,t.t_phone,t.t_birth,t.t_email,t.t_img,t.t_gender,t.t_height,t.t_weight,t.t_introduction,t.t_out
+		from management m join trainers t
+		on m.t_id=t.t_id
+		where m.u_id=#{value}
+	</select>
+
+	
+</mapper>

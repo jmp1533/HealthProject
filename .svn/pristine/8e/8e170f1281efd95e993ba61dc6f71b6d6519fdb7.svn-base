@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" 
+"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+
+<definition name=".admin.mstatistics.all.all" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+	<put-attribute name="admincontent" value="/WEB-INF/views/admin/mstatistics/all/all.jsp"></put-attribute>
+</definition>
+
+<definition name=".admin.mstatistics.user.age" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+	<put-attribute name="admincontent" value="/WEB-INF/views/admin/mstatistics/user/age.jsp"></put-attribute>
+</definition>
+
+
+<definition name=".admin.mstatistics.trainer.age" template="/WEB-INF/views/admin/mmain/adminlayout.jsp">
+	<put-attribute name="admincontent" value="/WEB-INF/views/admin/mstatistics/trainer/age.jsp"></put-attribute>
+</definition>
+</tiles-definitions>

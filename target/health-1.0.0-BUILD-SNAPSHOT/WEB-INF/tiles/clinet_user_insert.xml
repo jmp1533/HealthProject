@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" 
+"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+
+<definition name=".client.user.insert.Choice" template="/WEB-INF/views/health/main/layout.jsp">
+ 	<put-attribute name="content" value="/WEB-INF/views/client/user/insert/Choice.jsp"></put-attribute>
+</definition>
+
+<definition name=".client.user.insert.Login" template="/WEB-INF/views/health/main/layout.jsp">
+ 	<put-attribute name="content" value="/WEB-INF/views/client/user/insert/Login.jsp"></put-attribute>
+</definition>
+
+<definition name=".client.user.insert.trainer.Trainer_sign_up" template="/WEB-INF/views/health/main/layout.jsp">
+ 	<put-attribute name="content" value="/WEB-INF/views/client/user/insert/trainer/Trainer_sign_up.jsp"></put-attribute>
+</definition>
+
+<definition name=".client.user.insert.user.User_sign_up" template="/WEB-INF/views/health/main/layout.jsp">
+ 	<put-attribute name="content" value="/WEB-INF/views/client/user/insert/user/User_sign_up.jsp"></put-attribute>
+</definition>
+
+<definition name=".client.user.insert.addr.Address" template="/WEB-INF/views/client/user/insert/addr/Address.jsp">
+</definition>
+
+</tiles-definitions>
+

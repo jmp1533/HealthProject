@@ -1,0 +1,77 @@
+<%@page import="com.L3_1team.health.Utility.Page.OtpMailSender"%>
+<%@page import="java.util.Random"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="/resources/js/jquery-1.10.1.js"></script>
+<script type="text/javascript" src="/health/resources/js/jquery-ui-1.10.3.custom.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		var Interval=null;
+		
+		$("#auth").click(function() {
+			$.ajax({
+				url: '/authentication',
+				data: "otpset=" + $("#otpset").val() + "&toEmail=" + $("#toEmail").val(),
+				success:function(data){
+					$("#otpset").val($(data).find("otpset").text());
+				}
+			});
+			
+			if(Interval!=null){
+				clearInterval(Interval);
+			}
+			
+			var m;
+			var s;
+			var t = 180;
+			Interval = setInterval(function(){
+				t -= 1;
+				m = Math.floor(t/60);
+				s = t - m*60;
+				
+				if(m==0){
+					$("#time").html(s + "초");
+				}else{
+					$("#time").html(m +"분" + s + "초");
+				}
+				
+				if(m==0 && s==0){
+					clearInterval(Interval);
+					$("#time").html("인증번호 재발송!");
+					$("#otpset").val("askg789jk234gj63j");
+				}
+			},1000);
+		});
+	});
+</script>
+</head>
+<body>
+<form action="/client/user/finder/search/otpcheck" method="post">
+	<c:choose>
+		<c:when test="${not empty u_dto}">
+			<input type="hidden" value="${u_dto.u_id }" name="id" />
+			<input type="hidden" value="${u_dto.u_email }" name="toEmail" id="toEmail"/>
+		</c:when>
+		<c:when test="${not empty t_dto}">
+			<input type="hidden" value="${t_dto.t_id }" name="id" />
+			<input type="hidden" value="${t_dto.t_email }" name="toEmail" id="toEmail"/>
+		</c:when>
+		<c:otherwise>
+			<input type="hidden" value="${id}" name="id"/>
+		</c:otherwise>
+	</c:choose>
+	
+<input type="hidden" id="otpset" name="otpset" value="${otpset}"/>
+인증번호 입력<input type="text" name="otpcheck" id="otpcheck"/>
+<input type="button" value="인증번호 발송" id="auth"/><br/>
+<div id="time"></div>
+<input type="submit" value="확인"/>
+</form>
+</body>
+</html>

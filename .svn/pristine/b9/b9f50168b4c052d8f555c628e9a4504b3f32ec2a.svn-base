@@ -1,0 +1,100 @@
+package com.L3_1team.health.controller.client.user;
+
+import java.util.HashMap;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.L3_1team.health.service.client.user.TrainerService;
+import com.L3_1team.health.service.client.user.UserService;
+
+@Controller
+public class LoginController {
+	@Inject private UserService userService;
+	@Inject private TrainerService trainerService;
+	
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+	
+	public void setTrainerService(TrainerService trainerService) {
+		this.trainerService = trainerService;
+	}
+	
+	@RequestMapping(value = "/client/user/insert/Login", method = RequestMethod.GET)
+	public String loginForm() {
+		return ".client.user.insert.Login";
+	}
+	
+	@RequestMapping(value = "/client/user/insert/Login", method = RequestMethod.POST)
+	public String loginSelect(@Param("id")String id, @Param("password")String password,
+						HttpServletRequest request) {
+		
+		if(id.equals("admin") && password.equals("123")){
+			return ".admin.main";
+		}
+		
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("id", id);
+		map.put("password", password);
+		
+		String userlogid = userService.login(map);
+		String trainerlogid = trainerService.login(map);
+		
+		if(userlogid!=null){
+			userService.userlog(userlogid);
+			int n = userService.infoselect(userlogid);
+		
+			if(n==0){
+				request.getSession().setAttribute("n", 1);
+			}
+			request.getSession().setAttribute("ulogid", userlogid);
+			request.getSession().setAttribute("id", userlogid);
+
+			return "redirect:/";
+		}else{
+			if(trainerlogid!=null){
+				trainerService.trainerlog(trainerlogid);
+				request.getSession().setAttribute("tlogid", trainerlogid);
+				request.getSession().setAttribute("id", trainerlogid);
+
+				System.out.println("trainertrainertrainer");
+				return "redirect:/";
+			}
+			return ".client.user.insert.Login";
+		}
+	}
+	
+	@RequestMapping(value="/client/user/insert/Logout", method = RequestMethod.GET)
+	public String logoutForm(HttpServletRequest request) {
+		request.getSession().invalidate();
+		return "redirect:/";
+	}
+	
+	@RequestMapping(value="/client/popup/info/Userinfo", method = RequestMethod.GET)
+	public String infoForm() {
+		return ".client.popup.info.Userinfo";
+	}
+	
+	@RequestMapping(value="/client/popup/info/Userinfo", method = RequestMethod.POST)
+	public String infoinsert(@Param("u_id")String u_id, @Param("ui_weight")float ui_weight, 
+							@Param("ui_height")float ui_height) {
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("u_id", u_id);
+		map.put("ui_height", ui_height);
+		map.put("ui_weight", ui_weight);
+		
+		int n = userService.infoinsert(map);
+		
+		if(n<=0) return ".client.popup.info.Userinfo";
+		
+		return null;
+	}
+}

@@ -1,0 +1,44 @@
+package com.L3_1team.health.dto.client.user;
+
+import java.util.Date;
+
+
+public class Mypage_outDto {
+	private int out_num;
+	private String id;
+	private String out_reason;
+	private Date out_date;
+	public Mypage_outDto() {}
+	public Mypage_outDto(int out_num, String id, String out_reason,
+			Date out_date) {
+		super();
+		this.out_num = out_num;
+		this.id = id;
+		this.out_reason = out_reason;
+		this.out_date = out_date;
+	}
+	public int getOut_num() {
+		return out_num;
+	}
+	public void setOut_num(int out_num) {
+		this.out_num = out_num;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getOut_reason() {
+		return out_reason;
+	}
+	public void setOut_reason(String out_reason) {
+		this.out_reason = out_reason;
+	}
+	public Date getOut_date() {
+		return out_date;
+	}
+	public void setOut_date(Date out_date) {
+		this.out_date = out_date;
+	}
+}

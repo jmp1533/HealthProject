@@ -1,0 +1,23 @@
+package com.L3_1team.health.dao.user;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.stereotype.Repository;
+
+import com.L3_1team.health.dto.client.user.AddressDto;
+
+@Repository
+public class AddressDao {
+	@Inject private SqlSession sqlSession;
+	
+	public void setSqlSession(SqlSession sqlSession) {
+		this.sqlSession = sqlSession;
+	}
+	
+	public List<AddressDto> getlist(String addrname){
+		return sqlSession.selectList("com.L3_1team.health.mybatis.user.insert_addr.getlist", addrname);
+	}
+}

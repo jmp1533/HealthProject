@@ -1,0 +1,187 @@
+package com.L3_1team.health.dao.client.menu;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+
+import org.springframework.stereotype.Repository;
+
+import com.L3_1team.health.dto.client.menu.Health_news_Dto;
+
+@Repository
+public class Health_news_Dao {
+	public ArrayList<Health_news_Dto> list(int pageNum,String search1){
+		try{
+			//나중에 카테고리별 검색 구현하기
+			int pageSum=((pageNum-1)*10)+1;
+		    String search=URLEncoder.encode(search1,"utf-8");
+			StringBuffer sb=new StringBuffer();
+			String surl="http://openapi.naver.com/"+
+			            "search?key=1bb159a2d26ea179f82c1d5bcad8ebb5&query=" + search +
+			            "&target=news"+
+			            "&start="+pageSum;
+			URL url=new URL(surl);
+			HttpURLConnection conn=(HttpURLConnection)url.openConnection();
+			if(conn!=null){
+				conn.setConnectTimeout(10000);//접속대기시간10초지정
+				conn.setUseCaches(false);//캐시사용안함
+				if(conn.getResponseCode()== HttpURLConnection.HTTP_OK){
+					BufferedReader br=
+						new BufferedReader(
+							new InputStreamReader(conn.getInputStream(),"utf-8"));
+					String line="";
+					while((line=br.readLine())!=null){
+						sb.append(line);
+					}
+					br.close();
+					conn.disconnect();
+				}
+			}
+			String api=sb.toString().replaceAll("&lt;b&gt;", " ");
+			String api1=api.replaceAll("&lt;/b&gt;", " ");
+			String dateapi=sb.toString().replaceAll(" ", "/");
+			String test=dateapi.replaceAll("Mon,", "월요일").replaceAll("Tue,", "화요일")
+					.replaceAll("Wed,", "수요일").replaceAll("Thu,", "목요일")
+					.replaceAll("Fri,", "금요일").replaceAll("Sat,", "토요일").replaceAll("Sun,", "일요일")
+					.replaceAll("Jan", "01").replaceAll("Feb", "02").replaceAll("Mar", "03")
+					.replaceAll("Apr", "04").replaceAll("May", "05").replaceAll("Jun", "06")
+					.replaceAll("Jul", "07").replaceAll("Aug", "08").replaceAll("Sep", "09")
+					.replaceAll("Oct", "10").replaceAll("Nov", "11").replaceAll("Dec", "12");
+			String []Arr1title=api1.toString().split("<title>");
+			String []Arr1content=api1.toString().split("<description>");
+			String []Arr1link=sb.toString().split("<link>");
+			String []Arr1date=test.toString().split("<pubDate>");
+			String []Arr1total=sb.toString().split("<total>");
+			ArrayList<Health_news_Dto> list=new ArrayList<Health_news_Dto>();
+			String title="";
+			String content="";
+			String link="";
+			String date="";
+			int total=0;
+			String []Arr2title={""};
+			String []Arr2link={""};
+			String []Arr2date={""};
+			String []Arr2content={""};
+			String []Arr2total={""};
+			Arr2total=Arr1total[1].toString().split("</total>");
+			for (int i = 1; i < Arr1title.length-1; i++) {
+				Arr2title=Arr1title[i+1].toString().split("</title>");
+				Arr2content=Arr1content[i+1].toString().split("</description>");
+				Arr2link=Arr1link[i+1].toString().split("</link>");
+				Arr2date=Arr1date[i].toString().split("</pubDate>");
+				for (int j = 0; j < Arr2title.length; j+=2) {
+					title=Arr2title[j];
+					content=Arr2content[j];
+					link=Arr2link[j];
+					String a1date=Arr2date[j].substring(0,15);
+					String []newsdate={a1date.substring(0, 3),a1date.substring(4, 7),
+							a1date.substring(6, 10),a1date.substring(10, 14)};
+					date=newsdate[3]+newsdate[2]+newsdate[1]+newsdate[0];
+					total=Integer.valueOf(Arr2total[0]);
+				}
+				list.add(new Health_news_Dto(title, content, link, date, total));
+			}
+			return list;
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			return null;
+		}
+	}
+	public ArrayList<Health_news_Dto> search_list(int pageNum,String search1,String field,String keyword){
+		try{
+			//나중에 카테고리별 검색 구현하기
+			int pageSum=((pageNum-1)*10)+1;
+		    String search=URLEncoder.encode(search1,"utf-8");
+			StringBuffer sb=new StringBuffer();
+			String surl="http://openapi.naver.com/"+
+			            "search?key=1bb159a2d26ea179f82c1d5bcad8ebb5&query=" + search +
+			            "&target=news"+
+			            "&sort=sim"+
+			            "&start="+pageSum;
+			URL url=new URL(surl);
+			HttpURLConnection conn=(HttpURLConnection)url.openConnection();
+			if(conn!=null){
+				conn.setConnectTimeout(10000);//접속대기시간10초지정
+				conn.setUseCaches(false);//캐시사용안함
+				if(conn.getResponseCode()== HttpURLConnection.HTTP_OK){
+					BufferedReader br=
+						new BufferedReader(
+							new InputStreamReader(conn.getInputStream(),"utf-8"));
+					String line="";
+					while((line=br.readLine())!=null){
+						sb.append(line);
+					}
+					br.close();
+					conn.disconnect();
+				}
+			}
+			System.out.println(field);
+			System.out.println(keyword);
+			String api=sb.toString().replaceAll("&lt;b&gt;", " ");
+			String api1=api.replaceAll("&lt;/b&gt;", " ");
+			String dateapi=sb.toString().replaceAll(" ", "/");
+			String test=dateapi.replaceAll("Mon,", "월요일").replaceAll("Tue,", "화요일")
+					.replaceAll("Wed,", "수요일").replaceAll("Thu,", "목요일")
+					.replaceAll("Fri,", "금요일").replaceAll("Sat,", "토요일").replaceAll("Sun,", "일요일")
+					.replaceAll("Jan", "01").replaceAll("Feb", "02").replaceAll("Mar", "03")
+					.replaceAll("Apr", "04").replaceAll("May", "05").replaceAll("Jun", "06")
+					.replaceAll("Jul", "07").replaceAll("Aug", "08").replaceAll("Sep", "09")
+					.replaceAll("Oct", "10").replaceAll("Nov", "11").replaceAll("Dec", "12");
+			String []Arr1title=api1.toString().split("<title>");
+			String []Arr1content=api1.toString().split("<description>");
+			String []Arr1link=sb.toString().split("<link>");
+			String []Arr1date=test.toString().split("<pubDate>");
+			String []Arr1total=sb.toString().split("<total>");
+			ArrayList<Health_news_Dto> list=new ArrayList<Health_news_Dto>();
+			/**
+			 *  Health_news_Dto=값들어가는 순서
+			 *  1..String title="";
+				2..String content="";
+				3..String link="";
+				4..String date="";
+			 */
+			String title="";
+			String content="";
+			String link="";
+			String date="";
+			int total=0;
+			String []Arr2title={""};
+			String []Arr2link={""};
+			String []Arr2date={""};
+			String []Arr2content={""};
+			String []Arr2total={""};
+			Arr2total=Arr1total[1].toString().split("</total>");
+			for (int i = 1; i < Arr1title.length-1; i++) {
+				Arr2title=Arr1title[i+1].toString().split("</title>");
+				Arr2content=Arr1content[i+1].toString().split("</description>");
+				Arr2link=Arr1link[i+1].toString().split("</link>");
+				Arr2date=Arr1date[i].toString().split("</pubDate>");
+				for (int j = 0; j < Arr2title.length; j+=2) {
+					title=Arr2title[j];
+					content=Arr2content[j];
+					link=Arr2link[j];
+					String a1date=Arr2date[j].substring(0,15);
+					String []newsdate={a1date.substring(0, 3),a1date.substring(4, 7),
+							a1date.substring(6, 10),a1date.substring(10, 14)};
+					date=newsdate[3]+newsdate[2]+newsdate[1]+newsdate[0];
+					total=Integer.valueOf(Arr2total[0]);
+				}
+				if(field.equalsIgnoreCase("title") && title.indexOf(keyword) >=0){
+					list.add(new Health_news_Dto(title, content, link, date, total));
+				}else if(field.equalsIgnoreCase("content") && content.indexOf(keyword) >=0){
+					list.add(new Health_news_Dto(title, content, link, date, total));
+				}
+				
+			}
+			return list;
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			return null;
+		}
+	}
+}

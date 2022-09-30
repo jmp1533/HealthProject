@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.L3_1team.health.mybatis.popup.foodpoupMapper">
+
+
+<select id="find_list" parameterType="string" resultType="com.L3_1team.health.dto.client.popup.food_popup_Dto">
+  select * from food where name like '%' || #{value} || '%' 
+</select>
+</mapper>

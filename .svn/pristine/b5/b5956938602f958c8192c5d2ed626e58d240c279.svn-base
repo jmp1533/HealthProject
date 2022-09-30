@@ -1,0 +1,73 @@
+package com.L3_1team.health.dto.admin;
+
+import java.sql.Timestamp;
+
+public class admin_mservice_qna_reple_Dto {
+	private int qr_num;
+	private int q_num;
+	private String admin_id;
+	private String qr_content;
+	private Timestamp qr_date;
+	
+	public admin_mservice_qna_reple_Dto() {}
+
+	public admin_mservice_qna_reple_Dto(int qr_num, int q_num, String admin_id,
+			String qr_content, Timestamp qr_date) {
+		super();
+		this.qr_num = qr_num;
+		this.q_num = q_num;
+		this.admin_id = admin_id;
+		this.qr_content = qr_content;
+		this.qr_date = qr_date;
+	}
+
+	public int getQr_num() {
+		return qr_num;
+	}
+
+	public void setQr_num(int qr_num) {
+		this.qr_num = qr_num;
+	}
+
+	public int getQ_num() {
+		return q_num;
+	}
+
+	public void setQ_num(int q_num) {
+		this.q_num = q_num;
+	}
+
+	public String getAdmin_id() {
+		return admin_id;
+	}
+
+	public void setAdmin_id(String admin_id) {
+		this.admin_id = admin_id;
+	}
+
+	public String getQr_content() {
+		return qr_content;
+	}
+
+	public void setQr_content(String qr_content) {
+		this.qr_content = qr_content;
+	}
+
+	public Timestamp getQr_date() {
+		return qr_date;
+	}
+
+	public void setQr_date(Timestamp qr_date) {
+		this.qr_date = qr_date;
+	}
+
+	@Override
+	public String toString() {
+		return "admin_mservice_qna_reple_Dto [qr_num=" + qr_num + ", q_num="
+				+ q_num + ", admin_id=" + admin_id + ", qr_content="
+				+ qr_content + ", qr_date=" + qr_date + "]";
+	}
+	
+	
+	
+}

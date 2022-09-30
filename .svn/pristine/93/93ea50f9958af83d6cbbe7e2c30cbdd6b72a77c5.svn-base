@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.L3_1team.health.mybatis.user.insert_user">
+
+	<insert id="insert" parameterType="com.L3_1team.health.dto.client.user.UserDto">
+		 insert into users
+		 values(#{u_id}, #{u_pwd}, #{u_question}, #{u_answer}, #{u_name}, #{u_img},
+		 		#{u_phone}, #{u_email}, #{u_zipcode}, #{u_addr}, #{u_birth}, #{u_gender},
+		        #{u_targetweight}, sysdate, #{u_out})
+	</insert>
+	
+	<select id="login" parameterType="hashmap" resultType="String">
+		select u_id from users
+		where u_id=#{id} and u_pwd=#{password} and u_out=1
+	</select>
+	
+	<insert id="log" parameterType="String">
+		insert into userlog
+		values(userlog_SEQ.nextval, #{u_id}, sysdate)
+	</insert>
+	
+	<insert id="info" parameterType="hashmap">
+		insert into userinfo
+		values(userinfo_SEQ.nextval, #{u_id}, #{ui_weight}, #{ui_height}, sysdate)
+	</insert>
+	
+	<select id="infoselect" parameterType="String" resultType="int">
+		select count(*) from (
+			select to_char(ui_date, 'YY/MM/DD') d from userinfo where u_id=#{value}) u
+				where u.d = (select to_char(sysdate, 'YY/MM/DD') from dual)
+	</select>
+	
+</mapper>

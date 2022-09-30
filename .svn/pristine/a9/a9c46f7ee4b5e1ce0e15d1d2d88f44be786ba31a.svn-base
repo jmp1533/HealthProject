@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" 
+"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+
+<!-- 공지사항 -->
+<definition name=".client.menu.service.notice.Noticelist" template="/WEB-INF/views/health/main/layout.jsp">
+ 	<put-attribute name="content" value="/WEB-INF/views/client/menu/service/notice/Noticelist.jsp"></put-attribute>
+</definition>
+<definition name=".client.menu.service.notice.view" template="/WEB-INF/views/health/main/layout.jsp">
+ 	<put-attribute name="content" value="/WEB-INF/views/client/menu/service/notice/view.jsp"></put-attribute>
+</definition>
+<definition name=".client.menu.service.notice.write" template="/WEB-INF/views/health/main/layout.jsp">
+ 	<put-attribute name="content" value="/WEB-INF/views/client/menu/service/notice/write.jsp"></put-attribute>
+</definition>
+<definition name=".client.menu.service.notice.update" template="/WEB-INF/views/health/main/layout.jsp">
+ 	<put-attribute name="content" value="/WEB-INF/views/client/menu/service/notice/update.jsp"></put-attribute>
+</definition>
+
+
+<!-- Q&A -->
+<definition name=".client.menu.service.qna.qna_write" template="/WEB-INF/views/health/main/layout.jsp">
+ 	<put-attribute name="content" value="/WEB-INF/views/client/menu/service/qna/qna_write.jsp"></put-attribute>
+</definition>
+
+<definition name=".client.menu.service.qna.qna_list" template="/WEB-INF/views/health/main/layout.jsp">
+ 	<put-attribute name="content" value="/WEB-INF/views/client/menu/service/qna/qna_list.jsp"></put-attribute>
+</definition>
+
+<definition name=".client.menu.service.qna.qna_view" template="/WEB-INF/views/health/main/layout.jsp">
+ 	<put-attribute name="content" value="/WEB-INF/views/client/menu/service/qna/qna_view.jsp"></put-attribute>
+</definition>
+
+
+
+
+</tiles-definitions>
+

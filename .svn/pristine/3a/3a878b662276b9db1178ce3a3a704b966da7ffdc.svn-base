@@ -1,0 +1,71 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<title>Insert title here</title> 
+<style type="text/css">
+	.answer{
+	    display: none;
+	}
+</style>
+<link rel="stylesheet" href="/resources/css/jquery-ui-1.10.3.custom.css" type="text/css" />
+<script type="text/javascript" src="/resources/js/jquery-1.10.1.js"></script>
+<script type="text/javascript" src="/health/resources/js/jquery-ui-1.10.3.custom.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("li.question").click(function(){
+			$(this).next().slideToggle(500);
+		});
+	});
+</script>
+
+
+<h2>FAQ</h2>
+
+<div id="box_qna">
+
+<c:forEach var="dto" items="${list}">
+<ul>
+
+    <li class="question">[${dto.faq_cate}]Q.${dto.faq_question }</li>
+    <li class="answer">A.${dto.faq_answer }</li>	
+    <hr  width="50%" size="3">
+</ul>
+</c:forEach>
+</div>
+<!-- 페이징처리 -->
+	<div>
+		<c:choose>
+			<c:when test="${pu.startPageNum>10 }">
+				<a
+					href="/client/menu/service/faq/list?pageNum=${pu.startPageNum-1 }">[이전]</a>
+			</c:when>
+			<c:otherwise>
+			[이전]
+		</c:otherwise>
+		</c:choose>
+
+		<c:forEach var="i" begin="${pu.startPageNum }" end="${pu.endPageNum }">
+			<c:choose>
+				<c:when test="${i==pu.pageNum }">
+					<!--현재페이지만 빨간색으로 표시-->
+					<a href="/client/menu/service/faq/list?pageNum=${i}"> <span
+						style="color: red">[${i }]</span>
+					</a>
+				</c:when>
+				<c:otherwise>
+					<a href="/client/menu/service/faq/list?pageNum=${i}">[${i }]</a>
+				</c:otherwise>
+			</c:choose>
+		</c:forEach>
+
+		<c:choose>
+			<c:when test="${pu.endPageNum<pu.totalPageCount}">
+				<a
+					href="/client/menu/service/faq/list?pageNum=${pu.endPageNum+1 }">[다음]</a>
+			</c:when>
+			<c:otherwise>
+			[다음]
+		</c:otherwise>
+		</c:choose>
+	</div>

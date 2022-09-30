@@ -1,0 +1,31 @@
+package com.L3_1team.health.dao.client.popup;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.stereotype.Repository;
+
+import com.L3_1team.health.dto.client.popup.food_popup_Dto;
+@Repository
+public class foodpopup_Dao {
+
+		@Inject private SqlSession sqlSession;
+		
+		public SqlSession getSqlSession() {
+			return sqlSession;
+		}
+
+		public void setSqlSession(SqlSession sqlSession) {
+			this.sqlSession = sqlSession;
+		}
+
+		public List<food_popup_Dto> find_list(String food_name){
+			return sqlSession.selectList("com.L3_1team.health.mybatis.popup.foodpoupMapper.find_list",food_name);
+		}
+
+		
+	
+
+}
